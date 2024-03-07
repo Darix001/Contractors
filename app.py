@@ -1,9 +1,9 @@
+import flask
 from validate_email import validate_email
-from flask import Flask,render_template,request,flash,redirect,url_for
 from db import database,Usuarios
 from itertools import filterfalse
 
-app = Flask(__name__)
+app = flask.Flask(__name__)
 
 methods = ('POST','GET')
 
@@ -19,37 +19,39 @@ def close(exc,/):
 
 
 def route(obj,/):
-    def function(filename=(name:=obj.__name__)+'.html',value=None):
-        if request.method == 'POST':
-            value = obj(request.form)
-        return value or render_template(filename)
+    def function(filename=(name:=obj.__name__)+'.html',value=None,text=''):
+        if (request:=flask.request).method == 'POST':
+            value,text = obj(request.form)
+        return value or flask.render_template(filename,text=text)
     function.__name__ = name
     return app.route('/'+name, methods = methods)(function)
 
 
 @app.route('/', methods = methods)
-def main():
-    if request.method == 'POST':
+def main(text = 'Login'):
+    if (request:=flask.request).method == 'POST':
         form = request.form
-        usuario = Usuarios.get(Usuarios.usuario==form['Usuario'],
-            Usuarios.clave==form['Clave'])
-        if usuario:
-            return render_template('Home.html')
-    return render_template('Login.html')
+        try:
+            usuario = Usuarios.get(Usuarios.usuario==form['Usuario'],
+                Usuarios.clave==form['Clave'])
+        except Exception as e:
+            text = 'Invalid User or password'
+        else:
+            return app.redirect(app.url_for('Home'))
+    return flask.render_template('Login.html',text=text)
 
 
 @route
-def Register(form,data={},/):
+def Register(form, data={}, /):
     data|=form.items()
     if keys:=','.join(filterfalse(data.get,data)):
-        flash(f'Missing fields: '+keys,'error')
+        return None,f'Missing fields: '+keys
     elif not validate_email(data['email']):
-        flash('The Email adress does not exists.')
+        return None,'The Email adress does not exists.'
     elif not Usuarios(**data).save():
-        flash('Register Error, report to the administrator.')
+        return None,'Register Error, report to the administrator.'
     else:
-        flash('Registered! Welcome to Contractors.')
-        return redirect(url_for('main'))
+        return app.redirect(app.url_for('main')),None
 
 @route
 def Password(form,/):
@@ -60,5 +62,5 @@ def Home(form,/):
     pass
 
 if __name__ == '__main__':
-    app.secret_key = 'super secret key'
+    app.secret_key = b'tvqfs!tfdsfu!lfz'
     app.run(debug=True)
