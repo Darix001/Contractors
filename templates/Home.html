@@ -1,1 +1,151 @@
-<h1>Aqui va el Home</h1>
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        /* Estilos CSS */
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(113deg,
+                    rgba(197, 225, 251, 0) 82.81%,
+                    rgba(197, 225, 251, 0.3) 100%),
+                linear-gradient(117deg,
+                    rgba(51, 141, 224, 0.3) 12.59%,
+                    rgba(51, 141, 224, 0) 94.76%),
+                #f7f8f9;
+            min-height: 100vh;
+        }
+
+        .div {
+            width: 90%;
+            margin: 0 auto;
+
+        }
+
+        /* Estilos para el navbar */
+        .navbar {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px 0;
+
+        }
+
+        .navbar a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #000;
+        }
+
+        .navbar .left-links {
+            margin-top: 5px;
+        }
+
+        .navbar .right-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .right-links a {
+            margin-left: 15px;
+            text-decoration: none;
+            color: #000;
+        }
+
+        .navbar .right-links .login-link {
+            border: 1px solid #000;
+            border-radius: 20px;
+            padding: 5px;
+        }
+
+        .title {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .texto-p {
+            line-height: 40px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .right-div img {}
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .left-div,
+        .right-div {
+            flex-basis: 45%;
+        }
+
+        .title {
+            font-size: 50px;
+            font-weight: bold;
+        }
+
+        .texto-p {
+            line-height: 40px;
+            font-size: 30px;
+            font-weight: bold;
+        }
+        .start-button {
+            display: block;
+            width: 200px;
+            margin: 0 auto;
+            padding: 10px;
+            text-align: center;
+            background-color: #002E59;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="div">
+        <!-- Navbar -->
+        <div class="navbar">
+            <div class="left-links">
+                <a href="#">Learnings</a>
+                <a href="#">Community</a>
+                <a href="#">Jobs</a>
+                <a href="#">About us</a>
+            </div>
+            <div class="right-links">
+                <a href="#">Unirse ahora</a>
+                <a href="/login" class="login-link">Iniciar sesión</a>
+            </div>
+        </div>
+        <div class="container">
+            <div class="left-div">
+                <h1 class="title">Welcome to your new professional community</h1>
+                <hr>
+                <p class="texto-p">Hello, welcome to our jobs app! <br> Here you will find your next big
+                    career move. Browse, search and apply the easy way. <br> We're here to help you reach your career
+                    goals -
+                    good luck in your search!</p>
+                <a href="#" class="start-button">Start Now</a>
+            </div>
+            <div class="right-div">
+                <img src="https://i.ibb.co/ngGJ9bC/homepc.png" alt="homepc" width="850px" height="500px">
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
