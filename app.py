@@ -27,18 +27,35 @@ def route(obj,/):
     return app.route('/'+name, methods = methods)(function)
 
 
+# @app.route('/', methods = methods)
+# def main(text = 'Login'):
+#     if (request:=flask.request).method == 'POST':
+#         form = request.form
+#         try:
+#             usuario = Usuarios.get(Usuarios.usuario==form['Usuario'],
+#                 Usuarios.clave==form['Clave'])
+#         except Exception as e:
+#             text = 'Invalid User or password'
+#         else:
+#             return app.redirect(app.url_for('Home'))
+#     return flask.render_template('Login.html',text=text)
+
 @app.route('/', methods = methods)
-def main(text = 'Login'):
-    if (request:=flask.request).method == 'POST':
+def main():
+    return app.redirect(app.url_for('Home'))
+
+@app.route('/login', methods=methods)  # Cambia la ruta principal a '/login'
+def login(text='Login'):
+    if (request := flask.request).method == 'POST':
         form = request.form
         try:
-            usuario = Usuarios.get(Usuarios.usuario==form['Usuario'],
-                Usuarios.clave==form['Clave'])
+            usuario = Usuarios.get(Usuarios.usuario == form['Usuario'],
+                                   Usuarios.clave == form['Clave'])
         except Exception as e:
             text = 'Invalid User or password'
         else:
-            return app.redirect(app.url_for('Home'))
-    return flask.render_template('Login.html',text=text)
+            return flask.redirect(flask.url_for('home')) 
+    return flask.render_template('Login.html', text=text)
 
 
 @route
