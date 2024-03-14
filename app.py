@@ -1,11 +1,13 @@
 import flask
+from functools import partial
 from validate_email import validate_email
 from db import database,Usuarios
 from itertools import filterfalse
 
 app = flask.Flask(__name__)
 
-methods = ('POST','GET')
+app.route = partial(app.route,methods = ('POST','GET'))
+
 
 @app.before_request
 def connect():
@@ -18,44 +20,29 @@ def close(exc,/):
         database.close()
 
 
-def route(obj,/):
-    def function(filename=(name:=obj.__name__)+'.html',value=None,text=''):
+def route(func,/):
+    def function(filename=(name:=func.__name__)+'.html',value=None,text=''):
         if (request:=flask.request).method == 'POST':
-            value,text = obj(request.form)
+            value,text = func(request.form)
         return value or flask.render_template(filename,text=text)
     function.__name__ = name
-    return app.route('/'+name, methods = methods)(function)
+    return app.route('/'+name)(function)
 
 
-# @app.route('/', methods = methods)
-# def main(text = 'Login'):
-#     if (request:=flask.request).method == 'POST':
-#         form = request.form
-#         try:
-#             usuario = Usuarios.get(Usuarios.usuario==form['Usuario'],
-#                 Usuarios.clave==form['Clave'])
-#         except Exception as e:
-#             text = 'Invalid User or password'
-#         else:
-#             return app.redirect(app.url_for('Home'))
-#     return flask.render_template('Login.html',text=text)
-
-@app.route('/', methods = methods)
+@app.route('/')
 def main():
     return app.redirect(app.url_for('Home'))
 
-@app.route('/login', methods=methods)  # Cambia la ruta principal a '/login'
-def login(text='Login'):
-    if (request := flask.request).method == 'POST':
-        form = request.form
-        try:
-            usuario = Usuarios.get(Usuarios.usuario == form['Usuario'],
-                                   Usuarios.clave == form['Clave'])
-        except Exception as e:
-            text = 'Invalid User or password'
-        else:
-            return flask.redirect(flask.url_for('home')) 
-    return flask.render_template('Login.html', text=text)
+
+@route
+def Login(form,/): # Cambia la ruta principal a '/login'
+    try:
+        usuario = Usuarios.get(Usuarios.usuario == form['Usuario'],
+                               Usuarios.clave == form['Clave'])
+    except Exception as e:
+        return None,'Invalid User or password'
+    else:
+        return app.redirect(app.url_for('Home')),None
 
 
 @route
@@ -68,15 +55,23 @@ def Register(form, data={}, /):
     elif not Usuarios(**data).save():
         return None,'Register Error, report to the administrator.'
     else:
-        return app.redirect(app.url_for('main')),None
+        return app.redirect(app.url_for('Home')),None
+
 
 @route
 def Password(form,/):
     pass
 
+
 @route
 def Home(form,/):
     pass
+
+
+@route
+def Board(form,/):
+    pass
+
 
 if __name__ == '__main__':
     app.secret_key = b'tvqfs!tfdsfu!lfz'
