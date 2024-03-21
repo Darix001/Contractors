@@ -1,59 +1,16 @@
+<link rel="stylesheet" href="layout.css">
 <div class="div">
     <div class="div-2">
       <div class="div-3">
         <div class="column">
-          <div class="div-4">
-            <div class="div-5">WELCOME TO CONTRACTORS !!</div>
-            <div class="div-6">{{text}}</div>
-            <div class="div-7">
-              Are you a new user?
-              <span style="font-weight: 500; color: rgba(81, 115, 148, 1)">
-                <a href="/Register">Create an account</a>
-              </span>
-            </div>
-            <form method="POST">
-              <div class="div-8">
-                <img
-                  loading="lazy"
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/12984119deb432f12a7fdd8262de45d8d051ed1e4672775295df4064aad1c34e?"
-                  class="img"
-                />
-                <div class="div-9"> <input name="Usuario" placeholder="Usuario">
-                </div>
-              <!-- <div class="div-9">user or email</div> -->
-              </div>
-              <div class="div-10">
-                <img
-                  loading="lazy"
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/acc23d75cea1d3c534acf8d94498b1d8cd303192ca375cb5b1277e22462dfbe0?"
-                  class="img"
-                />
-                <div class="div-11"> <input type="password" name="Clave" placeholder="Clave">
-                </div>
-                <!-- <div class="div-11">password</div> -->
-              </div>
-            <div class="div-12">
-              <a href="/Forgot_Password"> Forgot your
-                <span style="font-weight: 500">password?</span>
-              </a>
-            </div>
-            <!-- <div class="div-13">Enter</div> -->
-            <div class="div-13"> <input type="submit" value="Enter"> </div>
-            </form>
-            <div class="div-14">
-              <div class="div-15"></div>
-              <div class="div-16">OR</div>
-              <div class="div-17"></div>
-            </div>
-            <div class="div-18">
-              <div class="div-19">Continue with Google</div>
-              <img
-                loading="lazy"
-                srcset="..."
-                class="img-2"
-              />
-            </div>
-          </div>
+          <h2>
+          Guarda Esta imagen en un lugar seguro, 
+              es tu código de restablecimiento de clave.</h2>
+          <img src="data:image/png;base64,{{code}}">
+          <div class="div-13"> <form method="POST">
+            <input type="submit" value="Aceptar">
+          </form>
+           </div>
         </div>
         <div class="column-2">
           <img
@@ -61,6 +18,7 @@
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/f4e7b914de968dfc81cee1f5be0733d1b62fc7598efb77e02cfb64937fe48001?"
             class="img-3"
           />
+
         </div>
       </div>
     </div>

@@ -1,6 +1,4 @@
-<link rel="stylesheet" href="layout.css">
-<style type="text/css">
-	textarea:focus, input:focus{
+textarea:focus, input:focus{
       outline: none;
     }
     input{
@@ -21,4 +19,3 @@
       height: auto;
       text-decoration-color: white;
     }
-</style>

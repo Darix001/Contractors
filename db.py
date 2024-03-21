@@ -2,7 +2,6 @@ from peewee import *
 
 database = SqliteDatabase('webapp_db.db')
 
-
 class BaseModel(Model):
     class Meta:
         database = database
@@ -17,6 +16,7 @@ class Usuarios(BaseModel):
     clave = CharField(column_name='Clave', null=True)
     profesion = CharField(column_name='Profesion', null=True)
     telefono = IntegerField(column_name='Telefono', null=True)
+    key = BlobField(null=True)
 
 
 class Modalidad(BaseModel):
@@ -66,3 +66,6 @@ class Solicitudes(BaseModel):
     estatus = ForeignKeyField(column_name='Estatus', field='id_estatus', model=Estatus, null=True)
     comentario = CharField(column_name='Comentario', null=True)
     calificacion = IntegerField(column_name='Calificacion', null=True)
+
+database.create_tables((Usuarios,Modalidad,Publicaciones,Comentario,Estatus,
+    EtiquetaReaccion,Reacciones,Solicitudes))
