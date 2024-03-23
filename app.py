@@ -1,4 +1,5 @@
-import flask, flask_mail, smtplib
+import flask, smtplib
+from os import urandom
 from types import MethodType
 from functools import partial
 from validate_email import validate_email
@@ -7,7 +8,7 @@ from db import database,Usuarios
 from itertools import filterfalse
 from email.mime.text import MIMEText
 
-mail = flask_mail.Mail(app := flask.Flask(__name__))
+app = flask.Flask(__name__)
 
 app.route = partial(app.route, methods = ('POST','GET'))
 
@@ -82,10 +83,9 @@ def email():
     msg['To'] = email = app.current_user.email
     msg['From'] = me = 'contractors.webapp@gmail.com'
     msg['Subject'] = 'Change Password'
-    s = smtplib.SMTP_SSL('smtp.gmail.com')
-    s.login(me,'fvskeowwfhrhxpqn')
-    s.sendmail(me,email,msg.as_string())
-    s.quit()
+    with smtplib.SMTP_SSL('smtp.gmail.com') as server:
+        s.login(me,'fvskeowwfhrhxpqn')
+        s.sendmail(me,email,msg.as_string())
     return app.redirect(app.url_for('Password'))
 
 
@@ -110,7 +110,7 @@ def Board(form, /):
 
 if __name__ == '__main__':
     app.config.update(
+        SECRET_KEY = urandom(),
         DEBUG = True,
-        SECRET_KEY = main.__code__.co_code,
         TESTING = True)
     app.run()
