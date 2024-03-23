@@ -1,34 +1,17 @@
-import flask
-from pyqrcode import create
-from operator import eq
+import flask, flask_mail, smtplib
+from types import MethodType
 from functools import partial
-from io import BytesIO
-from collections.abc import MutableMapping
 from validate_email import validate_email
+from secrets import choice
 from db import database,Usuarios
 from itertools import filterfalse
-from secrets import token_bytes
-from pyzbar.pyzbar import decode
-from PIL import Image
+from email.mime.text import MIMEText
 
-app = flask.Flask(__name__)
+mail = flask_mail.Mail(app := flask.Flask(__name__))
 
-app.route = partial(app.route,methods = ('POST','GET'))
+app.route = partial(app.route, methods = ('POST','GET'))
 
-ENCODE = range(1,1000000)
-
-def key() -> bytes:
-    usuario = app.current_user
-    return (usuario.email+usuario.clave).translate(ENCODE).encode()
-
-
-def encode() -> str:
-    return create(key()).png_as_base64_str()
-
-
-def verify(stream) -> bool:
-    return key() == decode(Image.open(stream))[0].data
-
+choice = MethodType(choice, range(10000000, 100000000))
 
 @app.before_request
 def connect():
@@ -77,54 +60,57 @@ def Register(form, data={}, /):
         return None,'Register Error, report to the administrator.'
     else:
         app.current_user = usuario
-        return app.redirect(app.url_for('QRCode')),None
+        return app.redirect(app.url_for('email')),None
 
 
 @route
 def Forgot_Password(form, /):
     try:
         app.current_user = usuario = Usuarios.get(
-            Usuarios.usuario==form['usuario'])
+            Usuarios.usuario==form['usuario'],
+            Usuarios.email==form['email'])
     except Exception as e:
-        return None,'Invalid Username.'
+        return None,'Invalid Username or email.'
+    else:
+        return app.redirect(app.url_for('email')),None
 
-    if (email:=form['email']) != usuario.email:
-        return None,'Invalid Email or Phone Number'
-    
-    return app.redirect(app.url_for('Password')),None
+
+@app.route('/email')
+def email():
+    app.code = code = f'{choice()}'
+    msg = MIMEText(f'Your Verification Code is: '+code)
+    msg['To'] = email = app.current_user.email
+    msg['From'] = me = 'contractors.webapp@gmail.com'
+    msg['Subject'] = 'Change Password'
+    s = smtplib.SMTP_SSL('smtp.gmail.com')
+    s.login(me,'fvskeowwfhrhxpqn')
+    s.sendmail(me,email,msg.as_string())
+    s.quit()
+    return app.redirect(app.url_for('Password'))
 
 
 @route
 def Password(form, /):
-    usuario = app.current_user
-    if not verify(flask.request.files.get('key')):
+    if form['code'] != app.code:
         return None,'Invalid Vefication code'
     if not all(form.values()):
         return None,'There are Missing Fields'
     if form['new_password'] != (key := form['confirm_password']):
         return None,'Passwords does not match.'
+    usuario = app.current_user
     usuario.clave = key
     usuario.save()
-    return app.redirect(app.url_for('QRCode')),None
+    return app.redirect(app.url_for('Home')),None
 
-
-@app.route('/QRCode',methods=('POST','GET'))
-def QRCode():
-    match flask.request.method:
-        case 'POST':
-            return app.redirect(app.url_for('Login'))
-
-        case 'GET':
-            return flask.render_template('QRCode.html',code=encode())
-
-@route
-def Home(form, /):
-    pass
 
 @route
 def Board(form, /):
     pass
 
+
 if __name__ == '__main__':
-    app.secret_key = encode.__code__.co_code
-    app.run(debug=True)
+    app.config.update(
+        DEBUG = True,
+        SECRET_KEY = main.__code__.co_code,
+        TESTING = True)
+    app.run()
