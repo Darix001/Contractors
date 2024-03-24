@@ -1,4 +1,7 @@
-import flask, smtplib
+from flask import Flask, request, render_template
+from peewee import DoesNotExist
+from orjson import loads
+from smtplib import SMTP_SSL
 from os import urandom
 from types import MethodType
 from functools import partial
@@ -6,13 +9,18 @@ from validate_email import validate_email
 from secrets import choice
 from db import database,Usuarios
 from itertools import filterfalse
-from email.mime.text import MIMEText
 
-app = flask.Flask(__name__)
 
-app.route = partial(app.route, methods = ('POST','GET'))
+app = Flask(__name__)
+
+app.route = partial(app.route,methods = ('POST','GET'))
 
 choice = MethodType(choice, range(10000000, 100000000))
+
+with open('config.json') as config:
+    config = loads(config.read())
+
+
 
 @app.before_request
 def connect():
@@ -26,12 +34,13 @@ def close(exc,/):
 
 
 def route(func,/):
-    def function(filename=(name:=func.__name__)+'.html',value=None,text=''):
-        if (request:=flask.request).method == 'POST':
+    filename = (name := func.__name__) + '.html'
+    def function(value=None, text='', /):
+        if request.method == 'POST':
             value,text = func(request.form)
-        return value or flask.render_template(filename,text=text)
+        return value or render_template(filename,text=text)
     function.__name__ = name
-    return app.route('/'+name)(function)
+    return app.route('/' + name)(function)
 
 
 @app.route('/')
@@ -43,8 +52,9 @@ def main():
 def Login(form, /): # Cambia la ruta principal a '/login'
     try:
         app.current_user = Usuarios.get(
-        Usuarios.usuario == form['Usuario'],Usuarios.clave == form['Clave'])
-    except Exception as e:
+        Usuarios.usuario == form['Usuario'],
+        Usuarios.clave == form['Clave'])
+    except DoesNotExist as e:
         return None,'Invalid User or password'
     else:
         return app.redirect(app.url_for('Home')),None
@@ -79,13 +89,11 @@ def Forgot_Password(form, /):
 @app.route('/email')
 def email():
     app.code = code = f'{choice()}'
-    msg = MIMEText(f'Your Verification Code is: '+code)
-    msg['To'] = email = app.current_user.email
-    msg['From'] = me = 'contractors.webapp@gmail.com'
-    msg['Subject'] = 'Change Password'
-    with smtplib.SMTP_SSL('smtp.gmail.com') as server:
-        s.login(me,'fvskeowwfhrhxpqn')
-        s.sendmail(me,email,msg.as_string())
+    email = app.current_user.email
+    msg = config['msg'].format_map(locals())
+    with SMTP_SSL('smtp.gmail.com') as srv:
+        srv.login(config['gmail'], config['key'])
+        srv.sendmail(config['gmail'], email, msg)
     return app.redirect(app.url_for('Password'))
 
 
@@ -108,9 +116,15 @@ def Board(form, /):
     pass
 
 
+@route
+def Home(form, /):
+    pass
+
+
 if __name__ == '__main__':
     app.config.update(
-        SECRET_KEY = urandom(),
+        SECRET_KEY = urandom(32),
         DEBUG = True,
-        TESTING = True)
+        TESTING = True,
+        )
     app.run()
