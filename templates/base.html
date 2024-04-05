@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Home{% endblock %}</title>
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/fontawesome-free/css/all.min.css') }}">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/adminlte.min.css') }}">
+    {% block head %}{% endblock %}
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(113deg,
+                    rgba(197, 225, 251, 0) 82.81%,
+                    rgba(197, 225, 251, 0.3) 100%),
+                linear-gradient(117deg,
+                    rgba(51, 141, 224, 0.3) 12.59%,
+                    rgba(51, 141, 224, 0) 94.76%),
+                #f7f8f9;
+        }
+
+        .navbar-nav {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            /* Ajusta el ancho de la barra de navegación */
+        }
+
+        .nav-item {
+            margin-right: 20px;
+            /* Espacio entre elementos de la lista */
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <div class="row w-100">
+        <div class="col-lg-12">
+            <nav class="navbar navbar-expand navbar-dark">
+                <ul class="navbar-nav d-flex" style="padding-left: 100px;">
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="#" class="nav-link">Learnings</a>
+                    </li>
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="#" class="nav-link">Community</a>
+                    </li>
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="#" class="nav-link">Jobs</a>
+                    </li>
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="#" class="nav-link">About us</a>
+                    </li>
+                    {% block iniciarSesion %}{% endblock %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+
+    <!-- Content -->
+    {% block content %}{% endblock %}
+
+    <!-- Main Footer -->
+    <div class="row w-100">
+        <div class="col-lg-12">
+            <footer class="bg-dark" style="padding: 10px 20px; height: 50px; position: fixed; bottom: 0; width: 99%; margin-top: 50px;">
+                <strong>Copyright &copy; 2024 ContractorsApp.</strong>
+                All rights reserved.
+                <div class="float-right d-none d-sm-inline-block">
+                    <b>Version</b> 3.2.0
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- REQUIRED SCRIPTS -->
+    <!-- jQuery -->
+    <script src="{{ url_for('static', filename='plugins/jquery/jquery.min.js') }}"></script>
+    <!-- Bootstrap -->
+    <script src="{{ url_for('static', filename='plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- overlayScrollbars -->
+    <script
+        src="{{ url_for('static', filename='plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
+    <!-- AdminLTE App -->
+    <script src="{{ url_for('static', filename='js/adminlte.js') }}"></script>
+
+    <!-- PAGE PLUGINS -->
+    <!-- jQuery Mapael -->
+    <script src="{{ url_for('static', filename='plugins/jquery-mousewheel/jquery.mousewheel.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/raphael/raphael.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/jquery-mapael/jquery.mapael.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/jquery-mapael/maps/usa_states.min.js') }}"></script>
+    <!-- ChartJS -->
+    <script src="{{ url_for('static', filename='plugins/chart.js/Chart.min.js') }}"></script>
+
+    <!-- AdminLTE for demo purposes -->
+    <script src="{{ url_for('static', filename='js/demo.js') }}"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="{{ url_for('static', filename='js/pages/dashboard2.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

@@ -1,256 +1,36 @@
-<!DOCTYPE html>
-<html lang="es">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <style>
-        /* Estilos CSS */
-        body {
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(113deg,
-                    rgba(197, 225, 251, 0) 82.81%,
-                    rgba(197, 225, 251, 0.3) 100%),
-                linear-gradient(117deg,
-                    rgba(51, 141, 224, 0.3) 12.59%,
-                    rgba(51, 141, 224, 0) 94.76%),
-                #f7f8f9;
-            min-height: 100vh;
-        }
+{% block title %}ContractorsApp{% endblock %}
+{% block iniciarSesion %}
+<div class="ml-auto">
+    <li class="nav-item d-none d-sm-inline-block">
+        <a href="{{ url_for('Register')}}" class="nav-link">Unirse ahora</a>
+    </li>
+    <li class="nav-item d-none d-sm-inline-block">
+        <a href="{{ url_for('login')}}" class="nav-link btn btn-block btn-outline-secondary btn-small">Iniciar
+            Sesión</a>
+    </li>
+</div>
+{% endblock %}
 
-        .div {
-            width: 90%;
-            margin: 0 auto;
-
-        }
-
-        /* Estilos para el navbar */
-        .navbar {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 20px 0;
-
-        }
-
-        .navbar a {
-            margin: 0 15px;
-            text-decoration: none;
-            color: #000;
-        }
-
-        .navbar .left-links {
-            margin-top: 5px;
-        }
-
-        .navbar .right-links {
-            display: flex;
-            align-items: center;
-        }
-
-        .navbar .right-links a {
-            margin-left: 15px;
-            text-decoration: none;
-            color: #000;
-        }
-
-        .navbar .right-links .login-link {
-            border: 1px solid #000;
-            border-radius: 20px;
-            padding: 5px;
-        }
-
-        .title {
-            font-size: 30px;
-            font-weight: bold;
-        }
-
-        .texto-p {
-            line-height: 40px;
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .right-div img {}
-
-        .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
-        }
-
-        .left-div,
-        .right-div {
-            flex-basis: 45%;
-        }
-
-        .title {
-            font-size: 50px;
-            font-weight: bold;
-        }
-
-        .texto-p {
-            line-height: 40px;
-            font-size: 30px;
-            font-weight: bold;
-        }
-
-        .start-button {
-            display: block;
-            width: 200px;
-            margin: 0 auto;
-            padding: 10px;
-            text-align: center;
-            background-color: #002E59;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 20px;
-            border: none;
-            cursor: pointer;
-        }
-
-        .div-searchers {
-            height: 270px;
-            background-color: #C5E1FB;
-            margin-top: 20px;
-            display: flex;
-            background: linear-gradient(113deg, rgba(197, 225, 251, 0) 82.81%, rgba(197, 225, 251, 0.3) 100%), linear-gradient(117deg, rgba(51, 141, 224, 0.3) 12.59%, rgba(51, 141, 224, 0) 94.76%), #DFECF9;
-        }
-
-        .searchers1,
-        .searchers2 {
-            flex: 1;
-        }
-
-        .searchers1 p {
-            text-align: center;
-            font-size: 40px;
-            line-height: 70px;
-        }
-        .searchers2 {
-            margin: 40px 40px;
-        }
-        .searchers2 h4 {
-            text-align: center;
-            font-size: 20px;
-            font-weight: 400;
-        }
-
-        .button-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-
-        .start-button1 {
-            display: block;
-            width: calc(30% - 10px);
-            text-align: center;
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-            border: 1px solid #000;
-            border-radius: 20px;
-            padding: 5px;
-        }
-        .post-job {
-            height: 270px;
-            margin-top: 20px;
-            display: flex;
-        }
-        .job1,
-        .job2 {
-            flex: 1;
-        }
-        .job1 p {
-            text-align: center;
-            font-size: 30px;
-            line-height: 70px;
-            color: #338DE0;
-        }
-        .job2 {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-        }
-        .job2 .start-button2 {
-            border: 3px solid #000;
-            border-radius: 20px;
-            padding: 10px;
-            text-decoration: none;
-            color: #000;
-        }
-
-    </style>
-</head>
-
-<body>
-
-    <div class="div">
-        <!-- Navbar -->
-        <div class="navbar">
-            <div class="left-links">
-                <a href="#">Learnings</a>
-                <a href="#">Community</a>
-                <a href="#">Jobs</a>
-                <a href="#">About us</a>
-            </div>
-            <div class="right-links">
-                <a href="#">Unirse ahora</a>
-                <a href="/login" class="login-link">Iniciar sesión</a>
-            </div>
-        </div>
-        <div class="container">
-            <div class="left-div">
-                <h1 class="title">Welcome to your new professional community</h1>
-                <hr>
-                <p class="texto-p">Hello, welcome to our jobs app! <br> Here you will find your next big
-                    career move. Browse, search and apply the easy way. <br> We're here to help you reach your career
-                    goals -
-                    good luck in your search!</p>
-                <a href="#" class="start-button">Start Now</a>
-            </div>
-            <div class="right-div">
-                <img src="https://i.ibb.co/ngGJ9bC/homepc.png" alt="homepc" width="850px" height="500px">
-            </div>
-        </div>
-
+{% block content %}
+<div class="row" style="margin-top: 50px; margin-left: 50px;">
+    <div class="col-lg-5">
+        <h1 class="h1" style="font-weight: bold; text-align: center;">Welcome to your new <br> professional community
+        </h1>
+        <hr>
+        <p style="line-height: 40px; font-size: 25px; font-weight: bold; text-align: center;">Hello, welcome to our jobs
+            app! <br> Here you will find your next big
+            career move. Browse, search and apply the easy way. <br> We're here to help you reach your career
+            goals -
+            good luck in your search!
+        </p>
+        <a href="{{ url_for('Register')}}">
+        <button type="button" class="btn btn-block btn-dark" style="margin-top: 80px;"> Start now</button>
+        </a>
     </div>
-    <div class="div-searchers">
-        <div class="searchers1">
-            <p>Find the right job, <br> courses and <br> internships for you.</p>
-        </div>
-        <div class="searchers2">
-            <h4>Suggested Searches</h4>
-            <div class="button-row">
-                <a href="#" class="start-button1">Engineering</a>
-                <a href="#" class="start-button1">Custom Services</a>
-                <a href="#" class="start-button1">Finance</a>
-            </div>
-            <div class="button-row">
-                <a href="#" class="start-button1">Digital Marketing</a>
-                <a href="#" class="start-button1">Human Resources</a>
-                <a href="#" class="start-button1">Grafic Designer</a>
-            </div>
-            <div class="button-row">
-                <a href="#" class="start-button1">Sales Agent</a>
-                <a href="#" class="start-button1">Administrating Services</a>
-                <a href="#" class="start-button1">Computing Science</a>
-            </div>
-        </div>
-    </div>
-    <div class="post-job">
-        <div class="job1">
-            <p>Post your job ad to be <br> seen by millions of <br> people</p>
-        </div>
-        <div class="job2">
-            <a href="#" class="start-button2">Post a job vacancy</a>
-        </div>
-    </div>
-
-</body>
-
-</html>
+    <duv class="col-lg-7">
+        <img src="https://i.ibb.co/ngGJ9bC/homepc.png" alt="homepc" width="850px" height="500px">
+    </duv>
+</div>
+{% endblock %}
