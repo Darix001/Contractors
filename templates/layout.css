@@ -1,0 +1,21 @@
+textarea:focus, input:focus{
+      outline: none;
+    }
+    input{
+      font-size: 26;
+      border-radius: 12px;
+      border-color: white;
+    }
+    input[type=submit] {
+      background-color: transparent;
+      background-repeat: no-repeat;
+      border: none;
+      cursor: hover;
+      color: white;
+      overflow: hidden;
+      outline: none;
+      font-size: 26;
+      width: 426px;
+      height: auto;
+      text-decoration-color: white;
+    }
