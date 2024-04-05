@@ -58,7 +58,7 @@ def Register(form, data={}, /):
     elif not Usuarios(**data).save():
         return None, 'Register Error, report to the administrator.'
     else:
-        return redirect(url_for('Login.html')), None
+        return redirect(url_for('login')), None
 
 @route
 def Password(form, /):
