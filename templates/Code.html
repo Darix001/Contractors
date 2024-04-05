@@ -3,16 +3,14 @@
       <div class="div-3">Reset your Password</div>
       <div class="div-4">
         <span style="font-weight: 400">
-          Enter your password below.
-          Remember, strongs passwords includes letters, symbols and numbers.
+          We Send you a verification code to your email. Enter it along with
+          your password below.
         </span>
       </div>
       <form method="POST" enctype = "multipart/form-data">
-      <div class="div-5"> <input name='new_password' type="password" 
-        placeholder="Enter new password"> </div>
-      <div class="div-6"> <input name="confirm_password" type="password" 
-        placeholder="Confirm new password"></div>
-      <div class="div-7"><input type="submit" value="Reset password"></div>
+      <div class="div-28">
+        <input name='code' placeholder="verification code"> </div>
+      <div class="div-7"><input type="submit" value="Verificate Code"></div>
       <h2>{{text}}</h2>
       </form>
     </div>
@@ -80,47 +78,6 @@
     @media (max-width: 991px) {
       .div-4 {
         max-width: 100%;
-      }
-    }
-    .div-5 {
-      border-radius: 20px;
-      background-color: rgba(255, 255, 255, 1);
-      margin-top: 60px;
-      width: 455px;
-      max-width: 100%;
-      justify-content: center;
-      align-items: start;
-      color: #436280;
-      white-space: nowrap;
-      text-align: right;
-      padding: 27px 47px;
-      font: 400 20px Fredoka, sans-serif;
-    }
-    @media (max-width: 991px) {
-      .div-5 {
-        white-space: initial;
-        margin-top: 40px;
-        padding: 0 20px;
-      }
-    }
-    .div-6 {
-      border-radius: 20px;
-      background-color: rgba(255, 255, 255, 1);
-      margin-top: 29px;
-      width: 455px;
-      max-width: 100%;
-      justify-content: center;
-      align-items: start;
-      color: #436280;
-      white-space: nowrap;
-      text-align: right;
-      padding: 27px 46px;
-      font: 400 20px Fredoka, sans-serif;
-    }
-    @media (max-width: 991px) {
-      .div-6 {
-        white-space: initial;
-        padding: 0 20px;
       }
     }
     .div-28 {
