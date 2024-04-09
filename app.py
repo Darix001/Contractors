@@ -31,9 +31,9 @@ def close(exc, /):
 def route(obj, /):
     name = obj.__name__
     filename = name + '.html'
-    def function(value=None, text='',/, **kwargs):
-        if (req := request).method == 'POST':
-            value, text = obj(req.form,kwargs)
+    def function(value=None, text='', /, **kwargs):
+        if request.method == 'POST':
+            value, text = obj(request.form, kwargs)
         return value or render_template(filename, text=text)
     function.__name__ = name
     return app.route('/' + name)(function)
@@ -48,7 +48,7 @@ def login(text='Login'):
         form = request.form
         usuario = form.get('Usuario')
         clave = form.get('Clave')
-        if not usuario or not clave:
+        if not (usuario and clave):
             text = 'Please Introduce Username and Password'
         else:
             try:
