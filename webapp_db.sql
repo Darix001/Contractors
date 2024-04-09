@@ -1,70 +1,98 @@
--- create database WEBAPP_DB
+BEGIN TRANSACTION
 
-CREATE TABLE Usuarios(
-    IDUsuario INTEGER PRIMARY KEY AUTOINCREMENT,
-    Nombre VARCHAR(20),
-    Apellido VARCHAR(30),
-    Email VARCHAR(50),
-    Usuario VARCHAR(50),
-    Clave VARCHAR(150),
-    Profesion VARCHAR(20),
-    Telefono INT
-);
+CREATE TABLE "comentario" (
+	"IdComentario" INTEGER PRIMARY KEY,
+	 "IdPublicacion" INTEGER,
+	 "IdUsuario" INTEGER,
+	 "Comentario" VARCHAR(255),
+	 FOREIGN KEY ("IdPublicacion") REFERENCES "publicaciones" ("IDPublicacion"),
+	 FOREIGN KEY ("IdUsuario") REFERENCES "usuarios" ("IDUsuario")
+	 )
 
-CREATE TABLE Modalidad (
-    IdModalidad INT PRIMARY KEY,
-    Nombre VARCHAR(20)
-);
+CREATE TABLE "estatus" (
+	"IdEstatus" INTEGER PRIMARY KEY,
+	 "Nombre" VARCHAR(255)
+	 )
 
-CREATE TABLE Publicaciones (
-    IDPublicacion INTEGER PRIMARY KEY AUTOINCREMENT,
-    IDUsuario INT,
-    Titulo VARCHAR(50),
-    Descripcion VARCHAR(150),
-    Imagen VARCHAR(150),
-    Localizacion VARCHAR(200),
-    Modalidad INT,
-    Area VARCHAR(50),
-    FOREIGN KEY (IDUsuario) REFERENCES Usuarios(IDUsuario),
-    FOREIGN KEY (Modalidad) REFERENCES Modalidad(IdModalidad)
-);
+CREATE TABLE "etiquetareaccion" (
+	"IdEtiqueta" INTEGER PRIMARY KEY,
+	 "Nombre" VARCHAR(255)
+	 )
 
-CREATE TABLE Estatus (
-    IdEstatus INT PRIMARY KEY,
-    Nombre VARCHAR(20)
-);
+CREATE TABLE "modalidad" (
+	"IdModalidad" INTEGER PRIMARY KEY,
+	 "Nombre" VARCHAR(255)
+	 )
 
-CREATE TABLE EtiquetaReaccion (
-    IdEtiqueta INT PRIMARY KEY,
-    Nombre VARCHAR(20)
-);
+CREATE TABLE "publicaciones" (
+	"IDPublicacion" INTEGER PRIMARY KEY,
+	 "IDUsuario" INTEGER,
+	 "Titulo" VARCHAR(255),
+	 "Descripcion" VARCHAR(255),
+	 "Imagen" VARCHAR(255),
+	 "Localizacion" VARCHAR(255),
+	 "Modalidad" INTEGER,
+	 "Area" VARCHAR(255),
+	 "Fecha" DATETIME NOT NULL,
+	 FOREIGN KEY ("IDUsuario") REFERENCES "usuarios" ("IDUsuario"),
+	 FOREIGN KEY ("Modalidad") REFERENCES "modalidad" ("IdModalidad")
+	 )
 
-CREATE TABLE Reacciones (
-    IdReaccion INT PRIMARY KEY,
-    IdPublicacion INT,
-    IdUsuario INT,
-    Reaccion INT,
-    FOREIGN KEY (IdPublicacion) REFERENCES Publicaciones(IDPublicacion),
-    FOREIGN KEY (IdUsuario) REFERENCES Usuarios(IDUsuario),
-    FOREIGN KEY (Reaccion) REFERENCES EtiquetaReaccion(IdEtiqueta)
-);
-CREATE TABLE Comentario (
-    IdComentario INT PRIMARY KEY,
-    IdPublicacion INT,
-    IdUsuario INT,
-    Comentario VARCHAR(200),
-    FOREIGN KEY (IdPublicacion) REFERENCES Publicaciones(IDPublicacion),
-    FOREIGN KEY (IdUsuario) REFERENCES Usuarios(IDUsuario)
-);
+CREATE TABLE "reacciones" (
+	"IdReaccion" INTEGER PRIMARY KEY,
+	 "IdPublicacion" INTEGER,
+	 "IdUsuario" INTEGER,
+	 "Reaccion" INTEGER,
+	 FOREIGN KEY ("IdPublicacion") REFERENCES "publicaciones" ("IDPublicacion"),
+	 FOREIGN KEY ("IdUsuario") REFERENCES "usuarios" ("IDUsuario"),
+	 FOREIGN KEY ("Reaccion") REFERENCES "etiquetareaccion" ("IdEtiqueta")
+	 )
 
-CREATE TABLE Solicitudes (
-    IdSolicitud INT PRIMARY KEY,
-    Solicitante INT,
-    IdPublicacion INT,
-    Estatus INT,
-    Comentario VARCHAR(200),
-    Calificacion INT,
-    FOREIGN KEY (Solicitante) REFERENCES Usuarios(IDUsuario),
-    FOREIGN KEY (IdPublicacion) REFERENCES Publicaciones(IDPublicacion),
-    FOREIGN KEY (Estatus) REFERENCES Estatus(IdEstatus)
-);
+CREATE TABLE "solicitudes" (
+	"IdSolicitud" INTEGER PRIMARY KEY,
+	 "Solicitante" INTEGER,
+	 "IdPublicacion" INTEGER,
+	 "Estatus" INTEGER,
+	 "Comentario" VARCHAR(255),
+	 "Calificacion" INTEGER,
+	 FOREIGN KEY ("Solicitante") REFERENCES "usuarios" ("IDUsuario"),
+	 FOREIGN KEY ("IdPublicacion") REFERENCES "publicaciones" ("IDPublicacion"),
+	 FOREIGN KEY ("Estatus") REFERENCES "estatus" ("IdEstatus")
+	 )
+
+CREATE TABLE "usuarios" (
+	"IDUsuario" INTEGER PRIMARY KEY,
+	 "Nombre" VARCHAR(255),
+	 "Apellido" VARCHAR(255),
+	 "Email" VARCHAR(255),
+	 "Usuario" VARCHAR(255),
+	 "Clave" VARCHAR(255),
+	 "Profesion" VARCHAR(255),
+	 "Telefono" INTEGER
+	 )
+
+CREATE UNIQUE INDEX "usuarios_Usuario" ON "usuarios" ("Usuario")
+
+CREATE INDEX "publicaciones_IDUsuario" ON "publicaciones" ("IDUsuario")
+
+CREATE INDEX "publicaciones_Modalidad" ON "publicaciones" ("Modalidad")
+
+CREATE INDEX "publicaciones_IDUsuario_Fecha" ON "publicaciones" ("IDUsuario","Fecha")
+
+CREATE INDEX "comentario_IdPublicacion" ON "comentario" ("IdPublicacion")
+
+CREATE INDEX "comentario_IdUsuario" ON "comentario" ("IdUsuario")
+
+CREATE INDEX "reacciones_IdPublicacion" ON "reacciones" ("IdPublicacion")
+
+CREATE INDEX "reacciones_IdUsuario" ON "reacciones" ("IdUsuario")
+
+CREATE INDEX "reacciones_Reaccion" ON "reacciones" ("Reaccion")
+
+CREATE INDEX "solicitudes_Solicitante" ON "solicitudes" ("Solicitante")
+
+CREATE INDEX "solicitudes_IdPublicacion" ON "solicitudes" ("IdPublicacion")
+
+CREATE INDEX "solicitudes_Estatus" ON "solicitudes" ("Estatus")
+
+COMMIT

@@ -17,7 +17,7 @@ class Usuarios(BaseModel):
     
     email = CharField(column_name='Email', null=True)
     
-    usuario = CharField(column_name='Usuario', null=True)
+    usuario = CharField(column_name='Usuario', null=True, unique=True)
     
     clave = CharField(column_name='Clave', null=True)
     
@@ -55,7 +55,7 @@ class Publicaciones(BaseModel):
 
     class Meta:
         database = database
-        indexes = ((('IdUsuario', 'Fecha'), False),)
+        indexes = ((('IDUsuario', 'Fecha'), False),)
 
 
 class Comentario(BaseModel):
