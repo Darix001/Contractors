@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for
 from validate_email import validate_email
+from functools import partial, wraps
 from db import database, Usuarios
 from itertools import filterfalse
-from functools import partial
 from smtplib import SMTP_SSL
 from types import MethodType
 from secrets import choice
@@ -15,7 +15,7 @@ app.route = partial(app.route, methods = ('POST','GET'))
 
 choice = MethodType(choice, range(10000000, 100000000))
 
-with open('config.json') as config:
+with open('config.json', 'rb') as config:
     config = loads(config.read())
 
 
@@ -29,21 +29,20 @@ def close(exc, /):
         database.close()
 
 def route(obj, /):
-    name = obj.__name__
-    filename = name + '.html'
+    filename = (name := obj.__name__) + '.html'
+    @wraps(obj)
     def function(value=None, text='', /, **kwargs):
         if request.method == 'POST':
             value, text = obj(request.form, kwargs)
         return value or render_template(filename, text=text)
-    function.__name__ = name
     return app.route('/' + name)(function)
 
 @app.route('/')
 def main():
     return redirect(url_for('Home'))
 
-@app.route('/login')
-def login(text='Login'):
+@app.route('/Login')
+def Login(text='Login'):
     if request.method == 'POST':
         form = request.form
         usuario = form.get('Usuario')
@@ -52,12 +51,12 @@ def login(text='Login'):
             text = 'Please Introduce Username and Password'
         else:
             try:
-                usuario_db = Usuarios.get(
+                app.current_user = Usuarios.get(
                     Usuarios.usuario == usuario,
                     Usuarios.clave == clave
                 )
             except Usuarios.DoesNotExist:
-                text = 'Usuario o clave incorrectos.'
+                text = 'Incorrect user or password'
             else:
                 return redirect(url_for('HomeUser'))
     return render_template('Login.html', text=text)
@@ -65,14 +64,14 @@ def login(text='Login'):
 @route
 def Register(form, data, /):
     app.current_user = usuario = Usuarios(**form)
-    if keys := ','.join(filterfalse(form.get, form.values())):
+    if keys := ','.join(filterfalse(form.get, form)):
         return None, f'Missing fields: {keys}'
     elif not validate_email(usuario.email):
         return None, 'The Email address does not exist.'
     elif not usuario.save():
         return None, 'Register Error, report to the administrator.'
     else:
-        return redirect(url_for('email', name = 'login')),None
+        return redirect(url_for('email', name = 'HomeUser')),None
 
 @app.route('/email/<name>')
 def email(name:str):
@@ -117,11 +116,12 @@ def Password(form, data, /):
 def Home(form,/):
     pass
 
-@app.route
-def HomeUser(form,/):
+@app.route('/HomeUser')
+def HomeUser():
     match request.method:
         case 'GET':
-            pass
+            data = app.current_user.__data__
+            return render_template('HomeUser.html', **data)
 
         case 'POST':
             pass

@@ -22,8 +22,8 @@
             <!-- Profile Image -->
             <div class="card card-dark card-widget widget-user" style="margin-top: 50px;">
                 <div class="widget-user-header bg-dark">
-                    <h3 class="widget-user-username">Gilberto Ubiera</h3>
-                    <h5 class="widget-user-desc">Software Engineer</h5>
+                    <h3 class="widget-user-username">{{nombre}}</h3>
+                    <h5 class="widget-user-desc">{{profesion}}</h5>
                 </div>
                 <div class="widget-user-image">
                     <img src="https://img.freepik.com/foto-gratis/chico-guapo-seguro-posando-contra-pared-blanca_176420-32936.jpg"
@@ -31,6 +31,8 @@
                 </div>
                 <div class="card-footer">
                     <p style="font-weight: bold;">Contacts</p>
+                    <p>{{telefono}}</p>
+                    <p>{{email}}</p>
                     <hr>
                 </div>
             </div>
@@ -47,7 +49,7 @@
                     <strong><i class="fas fa-book mr-1"></i> Education</strong>
 
                     <p class="text-muted">
-                        B.S. in Computer Science from the University of Tennessee at Knoxville
+                        {{educacion}}
                     </p>
 
                     <hr>
@@ -56,19 +58,20 @@
                     <strong><i class="fas fa-pencil-alt mr-1"></i> Skills</strong>
 
                     <p class="text-muted">
-                        <span class="tag tag-danger">UI Design</span>
+                        {% for habilidad in habilidades %}
+                            <span class="tag tag-primary">{{habilidad}}</span>
+                        <!-- <span class="tag tag-danger">UI Design</span>
                         <span class="tag tag-success">Coding</span>
                         <span class="tag tag-info">Javascript</span>
                         <span class="tag tag-warning">PHP</span>
-                        <span class="tag tag-primary">Node.js</span>
+                        <span class="tag tag-primary">Node.js</span> -->
                     </p>
 
                     <hr>
 
                     <strong><i class="far fa-file-alt mr-1"></i> Notes</strong>
 
-                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim
-                        neque.</p>
+                    <p class="text-muted">{{notas}}</p>
                 </div>
                 <!-- /.card-body -->
             </div>

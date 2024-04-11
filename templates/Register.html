@@ -4,7 +4,7 @@
 {% block iniciarSesion %}
 <div class="ml-auto">
     <li class="nav-item d-none d-sm-inline-block">
-        <a href="{{ url_for('login')}}" class="nav-link btn btn-block btn-outline-secondary btn-small">Iniciar
+        <a href="/login" class="nav-link btn btn-block btn-outline-secondary btn-small">Iniciar
             Sesión</a>
     </li>
 </div>
@@ -23,7 +23,7 @@
       <div class="register-box">
         <div class="card card-outline card-dark">
           <div class="card-header text-center">
-            <a href="{{ url_for('Register')}}" class="h1">Register</a>
+            <a href="/Register" class="h1">Register</a>
           </div>
           <div class="card-body">
             <p class="login-box-msg">Register a new account</p>
@@ -105,7 +105,7 @@
               </a>
             </div>
 
-            <a href="{{ url_for('login')}}" class="text-center">I already have an account</a>
+            <a href="/login" class="text-center">I already have an account</a>
           </div>
           <!-- /.form-box -->
         </div><!-- /.card -->
