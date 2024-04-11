@@ -5,7 +5,7 @@ from itertools import filterfalse
 from functools import partial
 from smtplib import SMTP_SSL
 from types import MethodType
-from random import choice
+from secrets import choice
 from orjson import loads
 from os import urandom
 
@@ -65,7 +65,7 @@ def login(text='Login'):
 @route
 def Register(form, data, /):
     app.current_user = usuario = Usuarios(**form)
-    if keys := ','.join(filterfalse(None, form.values())):
+    if keys := ','.join(filterfalse(form.get, form.values())):
         return None, f'Missing fields: {keys}'
     elif not validate_email(usuario.email):
         return None, 'The Email address does not exist.'
@@ -117,9 +117,14 @@ def Password(form, data, /):
 def Home(form,/):
     pass
 
-@route
+@app.route
 def HomeUser(form,/):
-    pass
+    match request.method:
+        case 'GET':
+            pass
+
+        case 'POST':
+            pass
 
 if __name__ == '__main__':
     app.config.update(
