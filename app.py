@@ -3,6 +3,7 @@ from validate_email import validate_email
 from functools import partial, wraps
 from db import database, Usuarios
 from itertools import filterfalse
+from peewee import IntegrityError
 from smtplib import SMTP_SSL
 from types import MethodType
 from secrets import choice
@@ -28,50 +29,54 @@ def close(exc, /):
     if not database.is_closed():
         database.close()
 
-def route(obj, /):
-    filename = (name := obj.__name__) + '.html'
-    @wraps(obj)
-    def function(value=None, text='', /, **kwargs):
-        if request.method == 'POST':
-            value, text = obj(request.form, kwargs)
-        return value or render_template(filename, text=text)
-    return app.route('/' + name)(function)
+def route(obj=None, /, text=''):
+    if obj:
+        filename = (name := obj.__name__) + '.html'
+        @wraps(obj)
+        def function(value=None, text=text, /, **kwargs):
+            if request.method == 'POST':
+                value, text = obj(request.form, kwargs)
+            return value or render_template(filename, text=text)
+        return app.route('/' + name)(function)
+    else:
+        return lambda obj, /: route(obj,text)
 
 @app.route('/')
 def main():
     return redirect(url_for('Home'))
 
-@app.route('/Login')
-def Login(text='Login'):
-    if request.method == 'POST':
-        form = request.form
-        usuario = form.get('Usuario')
-        clave = form.get('Clave')
-        if not (usuario and clave):
-            text = 'Please Introduce Username and Password'
+@route(text='Login')
+def Login():
+    form = request.form
+    usuario = form.get('Usuario')
+    clave = form.get('Clave')
+    if not (usuario and clave):
+        return None,'Please Introduce Username and Password'
+    else:
+        try:
+            app.current_user = Usuarios.get(
+                Usuarios.usuario == usuario,
+                Usuarios.clave == clave
+            )
+        except Usuarios.DoesNotExist:
+            return None,'Incorrect user or password'
         else:
-            try:
-                app.current_user = Usuarios.get(
-                    Usuarios.usuario == usuario,
-                    Usuarios.clave == clave
-                )
-            except Usuarios.DoesNotExist:
-                text = 'Incorrect user or password'
-            else:
-                return redirect(url_for('HomeUser'))
-    return render_template('Login.html', text=text)
+            return redirect(url_for('HomeUser')),None
 
-@route
+@route(text = 'Register a new account')
 def Register(form, data, /):
     app.current_user = usuario = Usuarios(**form)
     if keys := ','.join(filterfalse(form.get, form)):
         return None, f'Missing fields: {keys}'
     elif not validate_email(usuario.email):
         return None, 'The Email address does not exist.'
-    elif not usuario.save():
-        return None, 'Register Error, report to the administrator.'
     else:
-        return redirect(url_for('email', name = 'HomeUser')),None
+        try:
+            usuario.save()
+        except IntegrityError:
+            return None, 'Invalid Username'
+    print(8)
+    return redirect(url_for('email', name = 'Password')),None
 
 @app.route('/email/<name>')
 def email(name:str):
@@ -99,7 +104,7 @@ def Forgot_Password(form, data, /):
     except Usuarios.DoesNotExist:
         return 'Invalid Username or Email',None
     else:
-        return redirect(url_for('email', name='Password')),None
+        return redirect(url_for('email', name = 'Password')),None
 
 @route
 def Password(form, data, /):
