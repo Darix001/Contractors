@@ -1,7 +1,13 @@
 from peewee import *
 from datetime import datetime
+from orjson import dumps, loads
 
 database = SqliteDatabase('webapp_db.db')
+
+class StringListField(TextField):
+    def python_value(self, value:str) -> list[str]:
+        return value.split(',')
+
 
 class BaseModel(Model):
     class Meta:
@@ -21,9 +27,15 @@ class Usuarios(BaseModel):
     
     clave = CharField(column_name='Clave', null=True)
     
-    profesion = CharField(column_name='Profesion', null=True)
+    profesion = CharField(column_name='Profesion', default='')
     
-    telefono = IntegerField(column_name='Telefono', null=True)
+    telefono = IntegerField(column_name='Telefono', default='')
+
+    educacion = TextField(column_name='Educacion', default='')
+
+    habilidades = StringListField(column_name='Habilidades', default='')
+
+    notas = TextField(column_name='Notas', default='')
 
 
 class Modalidad(BaseModel):
@@ -115,4 +127,4 @@ class Solicitudes(BaseModel):
 database.create_tables((Usuarios,Modalidad,Publicaciones,Comentario,Estatus,
     EtiquetaReaccion,Reacciones,Solicitudes))
 
-del datetime
+del datetime, dumps, loads
