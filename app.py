@@ -33,10 +33,13 @@ def route(obj=None, /, text=''):
     if obj:
         filename = (name := obj.__name__) + '.html'
         @wraps(obj)
-        def function(value=None, text=text, /, **kwargs):
+        def function(text=text, /):
             if request.method == 'POST':
-                value, text = obj(request.form, kwargs)
-            return value or render_template(filename, text=text)
+                text = obj(request.form)
+                if not isinstance(text, str):
+                    return text
+            return render_template(filename, text=text)
+            
         return app.route('/' + name)(function)
     else:
         return lambda obj, /: route(obj,text)
@@ -46,8 +49,7 @@ def main():
     return redirect(url_for('Home'))
 
 @route(text='Login')
-def Login(form, data, /):
-    form = request.form
+def Login(form, /):
     usuario = form.get('Usuario')
     clave = form.get('Clave')
     if not (usuario and clave):
@@ -64,7 +66,7 @@ def Login(form, data, /):
             return redirect(url_for('HomeUser')),None
 
 @route(text = 'Register a new account')
-def Register(form, data, /):
+def Register(form, /):
     app.current_user = usuario = Usuarios(**form)
     if keys := ','.join(filterfalse(form.get, form)):
         return None, f'Missing fields: {keys}'
@@ -88,13 +90,13 @@ def email(name:str):
     return redirect(url_for('Code', name = name))
 
 @route
-def Code(form, data, /):
+def Code(form, /):
     if form['code'] == app.code:
         return redirect(url_for(request.args.get('name'))), None
     return 'Invalid Verification Code', None
 
 @route
-def Forgot_Password(form, data, /):
+def Forgot_Password(form, /):
     try:
         app.current_user = Usuarios.get(
             Usuarios.usuario == form['usuario'],
@@ -106,7 +108,7 @@ def Forgot_Password(form, data, /):
         return redirect(url_for('email', name = 'Password')),None
 
 @route
-def Password(form, data, /):
+def Password(form, /):
     if not all(form.values()):
         return None,'There are Missing Fields'
     if form['new_password'] != (key := form['confirm_password']):
@@ -117,7 +119,7 @@ def Password(form, data, /):
     return redirect(url_for('HomeUser')), None
 
 @route
-def Home(form, data, /):
+def Home(form, /):
     pass
 
 @app.route('/HomeUser')
