@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %}Edit{% endblock %}
+
+{% block iniciarSesion %}
+<div class="ml-auto">
+    <li class="nav-item d-none d-sm-inline-block">
+        <a href="/Login" class="nav-link btn btn-block btn-outline-secondary btn-small">Iniciar Sesión </a>
+    </li>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<div class="container" style="margin-top: 50px; margin-bottom: 100px;">
+  <div class="row w-100">
+    <div class="col-lg-8">
+      <img
+        src="https://cdn.builder.io/api/v1/image/assets/TEMP/f01a4fa76a1f4184a625d22596012e1b7cce257d00187beb30edc44f9accc62c?"
+        alt="">
+    </div>
+    <div class="col-lg-4">
+      <div class="register-box">
+        <div class="card card-outline card-dark">
+          <div class="card-header text-center">
+            <a href="/Edit" class="h1"> Edit </a>
+          </div>
+          <div class="card-body">
+            <p class="login-box-msg">{{text}}</p>
+
+            <form method="post">
+              
+              <!-- Phone -->
+              <div class="input-group mb-3">
+                <input type="tel" class="form-control" placeholder="Phone Number" name="telefono" required>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-user"></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Email -->
+              <div class="input-group mb-3">
+                <input type="email" class="form-control" placeholder="Email" name="email" required>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-envelope"></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Educacion -->
+              <div class="input-group mb-3">
+                <textarea name="educacion" class="form-control" cols="40" rows="2" placeholder="Education"></textarea>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-file-signature"></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Skills -->
+
+
+              <!-- Notes -->
+              <div class="input-group mb-3">
+                <textarea name="notas" class="form-control" cols="40" rows="4" placeholder="Notes"></textarea>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-file-signature"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <!-- <div class="col-8">
+                  <div class="icheck-primary">
+                    <input type="checkbox" id="agreeTerms" name="terms" value="agree">
+                    <label for="agreeTerms">
+                      I agree to the <a href="#">terms</a>
+                    </label>
+                  </div>
+                </div> -->
+                <!-- /.col -->
+                <div class="col-4">
+                  <button type="submit" class="btn btn-dark btn-block">Save</button>
+                </div>
+                <!-- /.col -->
+              </div>
+            </form>
+
+            <div class="social-auth-links text-center">
+              <a href="#" class="btn btn-block btn-dark">
+                <i class="fab fa-facebook mr-2"></i>
+                Sign up using Facebook
+              </a>
+              <a href="#" class="btn btn-block btn-dark">
+                <i class="fab fa-google-plus mr-2"></i>
+                Sign up using Google+
+              </a>
+            </div>
+
+            <a href="/Login" class="text-center">I already have an account</a>
+          </div>
+          <!-- /.form-box -->
+        </div><!-- /.card -->
+      </div>
+      <!-- /.register-box -->
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

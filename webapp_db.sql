@@ -25,7 +25,7 @@ CREATE TABLE "modalidad" (
 	 )
 
 CREATE TABLE "publicaciones" (
-	"IDPublicacion" INTEGER PRIMARY KEY,
+	 "IDPublicacion" INTEGER PRIMARY KEY,
 	 "IDUsuario" INTEGER,
 	 "Titulo" VARCHAR(255),
 	 "Descripcion" VARCHAR(255),
@@ -33,7 +33,7 @@ CREATE TABLE "publicaciones" (
 	 "Localizacion" VARCHAR(255),
 	 "Modalidad" INTEGER,
 	 "Area" VARCHAR(255),
-	 "Fecha" DATETIME NOT NULL,
+	 "Fecha" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	 FOREIGN KEY ("IDUsuario") REFERENCES "usuarios" ("IDUsuario"),
 	 FOREIGN KEY ("Modalidad") REFERENCES "modalidad" ("IdModalidad")
 	 )

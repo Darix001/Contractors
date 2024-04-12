@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
+from db import database, Usuarios, Publicaciones
 from validate_email import validate_email
 from functools import partial, wraps
-from db import database, Usuarios
 from itertools import filterfalse
 from peewee import IntegrityError
 from smtplib import SMTP_SSL
@@ -29,7 +29,7 @@ def close(exc, /):
     if not database.is_closed():
         database.close()
 
-def route(obj=None, /, text=''):
+def post(obj=None, /, text=''):
     if obj:
         filename = (name := obj.__name__) + '.html'
         @wraps(obj)
@@ -39,21 +39,20 @@ def route(obj=None, /, text=''):
                 if not isinstance(text, str):
                     return text
             return render_template(filename, text=text)
-            
         return app.route('/' + name)(function)
     else:
-        return lambda obj, /: route(obj,text)
+        return partial(post, text=text)
 
 @app.route('/')
 def main():
     return redirect(url_for('Home'))
 
-@route(text='Login')
+@post(text='Login')
 def Login(form, /):
     usuario = form.get('Usuario')
     clave = form.get('Clave')
     if not (usuario and clave):
-        return None,'Please Introduce Username and Password'
+        return 'Please Introduce Username and Password'
     else:
         try:
             app.current_user = Usuarios.get(
@@ -61,23 +60,23 @@ def Login(form, /):
                 Usuarios.clave == clave
             )
         except Usuarios.DoesNotExist:
-            return None,'Incorrect user or password'
+            return 'Incorrect user or password'
         else:
-            return redirect(url_for('HomeUser')),None
+            return redirect(url_for('HomeUser'))
 
-@route(text = 'Register a new account')
+@post(text = 'Register a new account')
 def Register(form, /):
     app.current_user = usuario = Usuarios(**form)
     if keys := ','.join(filterfalse(form.get, form)):
-        return None, f'Missing fields: {keys}'
+        return  f'Missing fields: {keys}'
     elif not validate_email(usuario.email):
-        return None, 'The Email address does not exist.'
+        return  'The Email address does not exist.'
     else:
         try:
             usuario.save()
         except IntegrityError:
-            return None, 'Invalid Username'
-    return redirect(url_for('email', name = 'Password')),None
+            return  'Invalid Username'
+    return redirect(url_for('email', name = 'Password'))
 
 @app.route('/email/<name>')
 def email(name:str):
@@ -89,13 +88,13 @@ def email(name:str):
         srv.sendmail(config['gmail'], email, msg)
     return redirect(url_for('Code', name = name))
 
-@route
+@post
 def Code(form, /):
     if form['code'] == app.code:
-        return redirect(url_for(request.args.get('name'))), None
-    return 'Invalid Verification Code', None
+        return redirect(url_for(request.args.get('name')))
+    return 'Invalid Verification Code'
 
-@route
+@post
 def Forgot_Password(form, /):
     try:
         app.current_user = Usuarios.get(
@@ -103,34 +102,36 @@ def Forgot_Password(form, /):
             Usuarios.email == form['email']
         )
     except Usuarios.DoesNotExist:
-        return 'Invalid Username or Email', None
+        return 'Invalid Username or Email'
     else:
-        return redirect(url_for('email', name = 'Password')),None
+        return redirect(url_for('email', name = 'Password'))
 
-@route
+@post
 def Password(form, /):
     if not all(form.values()):
-        return None,'There are Missing Fields'
+        return 'There are Missing Fields'
     if form['new_password'] != (key := form['confirm_password']):
-        return None,'Passwords does not match.'
+        return 'Passwords does not match.'
     usuario = app.current_user
     usuario.clave = key
     usuario.save()
-    return redirect(url_for('HomeUser')), None
+    return redirect(url_for('HomeUser'))
 
-@route
+@post
 def Home(form, /):
     pass
 
+@post
+def Edit(form, /):
+    usuario = app.current_user
+    usuario.__data__.update(form)
+    usuario.save()
+    return redirect(url_for('HomeUser'))
+
 @app.route('/HomeUser')
 def HomeUser():
-    match request.method:
-        case 'GET':
-            data = app.current_user.__data__
-            return render_template('HomeUser.html', **data)
-
-        case 'POST':
-            pass
+    data = app.current_user.__data__
+    return render_template('HomeUser.html', **data)
 
 
 if __name__ == '__main__':
