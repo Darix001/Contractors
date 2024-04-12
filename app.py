@@ -46,7 +46,7 @@ def main():
     return redirect(url_for('Home'))
 
 @route(text='Login')
-def Login():
+def Login(form, data, /):
     form = request.form
     usuario = form.get('Usuario')
     clave = form.get('Clave')
@@ -75,7 +75,6 @@ def Register(form, data, /):
             usuario.save()
         except IntegrityError:
             return None, 'Invalid Username'
-    print(8)
     return redirect(url_for('email', name = 'Password')),None
 
 @app.route('/email/<name>')
@@ -91,8 +90,8 @@ def email(name:str):
 @route
 def Code(form, data, /):
     if form['code'] == app.code:
-        return redirect(url_for(request.args.get('name'))),None
-    return 'Invalid Verification Code',None
+        return redirect(url_for(request.args.get('name'))), None
+    return 'Invalid Verification Code', None
 
 @route
 def Forgot_Password(form, data, /):
@@ -102,7 +101,7 @@ def Forgot_Password(form, data, /):
             Usuarios.email == form['email']
         )
     except Usuarios.DoesNotExist:
-        return 'Invalid Username or Email',None
+        return 'Invalid Username or Email', None
     else:
         return redirect(url_for('email', name = 'Password')),None
 
@@ -115,10 +114,10 @@ def Password(form, data, /):
     usuario = app.current_user
     usuario.clave = key
     usuario.save()
-    return redirect(url_for('HomeUser')),None
+    return redirect(url_for('HomeUser')), None
 
 @route
-def Home(form,/):
+def Home(form, data, /):
     pass
 
 @app.route('/HomeUser')
@@ -130,6 +129,7 @@ def HomeUser():
 
         case 'POST':
             pass
+
 
 if __name__ == '__main__':
     app.config.update(
