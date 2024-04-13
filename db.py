@@ -67,7 +67,7 @@ class Publicaciones(BaseModel):
 
     class Meta:
         database = database
-        indexes = ((('IDUsuario', 'Fecha'), False),)
+        indexes = ((('id_usuario', 'Fecha'), False),)
 
 
 class Comentario(BaseModel):
