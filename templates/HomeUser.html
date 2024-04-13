@@ -4,6 +4,7 @@
 {% block iniciarSesion %}
 
 <div class="ml-auto">
+    <form method="POST">
     <li class="nav-item d-none d-sm-inline-block">
         <a href="#" class="nav-link btn btn-block btn-outline-secondary btn-small">
             <i class="fas fa-user"></i>
@@ -11,8 +12,9 @@
         </a>
     </li>
     <li class="nav-item d-none d-sm-inline-block">
-        <a href="/Home" class="nav-link">Cerrar sesión</a>
+        <a href="/close" class="nav-link">Log Out</a>
     </li>
+    </form>
 </div>
 
 {% endblock %}
@@ -24,7 +26,7 @@
             <!-- Profile Image -->
             <div class="card card-dark card-widget widget-user" style="margin-top: 50px;">
                 <div class="widget-user-header bg-dark">
-                    <h3 class="widget-user-username">{{nombre}}</h3>
+                    <h3 class="widget-user-username">{{usuario}}</h3>
                     <h5 class="widget-user-desc">{{profesion}}</h5>
                 </div>
                 <div class="widget-user-image">
@@ -49,7 +51,7 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-                    <strong><i class="fas fa-book mr-1"></i> Education</strong>
+                    <strong><i class="fas fa-book mr-1"></i>Education</strong>
 
                     <p class="text-muted">
                         {{educacion}}
@@ -57,11 +59,11 @@
 
                     <hr>
 
-                    <strong><i class="fas fa-pencil-alt mr-1"></i> Skills</strong>
+                    <strong><i class="fas fa-pencil-alt mr-1"></i>Skills</strong>
 
                     <p class="text-muted">
                         {% for habilidad in habilidades %}
-                            <span class="tag tag-primary">{{habilidad}}</span>
+                            <span class="tag tag-primary">{{habilidad}}|</span>
                          {% endfor %}
                         <!-- <span class="tag tag-danger">UI Design</span>
                         <span class="tag tag-success">Coding</span>
@@ -71,7 +73,7 @@
                     </p>
 
                     <hr>
-                    <strong><i class="far fa-file-alt mr-1"></i> Notes</strong>
+                    <strong><i class="far fa-file-alt mr-1"></i>Notes</strong>
 
                     <p class="text-muted">{{notas}}</p>
                 </div>

@@ -31,7 +31,7 @@
               
               <!-- Phone -->
               <div class="input-group mb-3">
-                <input type="tel" class="form-control" placeholder="Phone Number" name="telefono" required>
+                <input type="tel" class="form-control" placeholder="Phone Number" name="telefono" value="{{telefono}}" required>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="fas fa-user"></span>
@@ -41,7 +41,7 @@
 
               <!-- Email -->
               <div class="input-group mb-3">
-                <input type="email" class="form-control" placeholder="Email" name="email" required>
+                <input type="email" class="form-control" placeholder="Email" name="email" value="{{email}}" required>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="fas fa-envelope"></span>
@@ -51,7 +51,7 @@
 
               <!-- Educacion -->
               <div class="input-group mb-3">
-                <textarea name="educacion" class="form-control" cols="40" rows="2" placeholder="Education"></textarea>
+                <textarea name="educacion" class="form-control" cols="40" rows="2" placeholder="Education">{{educacion}}</textarea>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="fas fa-file-signature"></span>
@@ -64,7 +64,7 @@
 
               <!-- Notes -->
               <div class="input-group mb-3">
-                <textarea name="notas" class="form-control" cols="40" rows="4" placeholder="Notes"></textarea>
+                <textarea name="notas" class="form-control" cols="40" rows="4" placeholder="Notes">{{notas}}</textarea>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="fas fa-file-signature"></span>
@@ -100,7 +100,6 @@
               </a>
             </div>
 
-            <a href="/Login" class="text-center">I already have an account</a>
           </div>
           <!-- /.form-box -->
         </div><!-- /.card -->
