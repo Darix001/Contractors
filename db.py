@@ -59,7 +59,7 @@ class Publicaciones(BaseModel):
     localizacion = CharField(column_name='Localizacion', null=True)
     
     modalidad = ForeignKeyField(column_name='Modalidad', field='id_modalidad',
-        model=Modalidad, null=True)
+        model=Modalidad)
     
     area = CharField(column_name='Area', null=True)
     
@@ -123,8 +123,5 @@ class Solicitudes(BaseModel):
   
     calificacion = IntegerField(column_name='Calificacion', null=True)
 
-
 database.create_tables((Usuarios,Modalidad,Publicaciones,Comentario,Estatus,
     EtiquetaReaccion,Reacciones,Solicitudes))
-
-del datetime, dumps, loads

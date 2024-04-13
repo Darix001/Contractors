@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+{% block title %}Edit{% endblock %}
+
+
+
+{% block iniciarSesion %}
+<div class="ml-auto">
+  <li class="nav-item d-none d-sm-inline-block">
+    <a href="#" class="nav-link btn btn-block btn-outline-secondary btn-small">
+      <i class="fas fa-user"></i>
+      Mi perfil
+    </a>
+  </li>
+  <li class="nav-item d-none d-sm-inline-block">
+    <a href="/Home" class="nav-link">Cerrar sesión</a>
+  </li>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<div class="container" style="margin-top: 50px; margin-bottom: 100px;">
+  <form method="post">
+    <div class="row w-100">
+      <div class="col-lg-12">
+        <div class="card card-dark">
+          <div class="card-header">
+            <h3 class="card-title">Personal information</h3>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-lg-12">
+                <label for="nombreCompleto">Full Name: *</label>
+                <input type="text" class="form-control" id="nombreCompleto" name="nombreCompleto"
+                  placeholder="Full Name" required>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12">
+                <label for="tituloProfesional">Current title or professional position: *</label>
+                <select class="form-control" id="tituloProfesional" name="tituloProfesional" required>
+                  <option value="">Select</option>
+                  <option value="estudios incompletos">No studies or incomplete school studies</option>
+                  <option value="Bachillerato">High School</option>
+                  <option value="Licenciatura">Degree</option>
+                  <option value="Maestría">Master's degree</option>
+                  <option value="Doctorado">Doctorate</option>
+                  <!-- Agrega más opciones según necesites -->
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12">
+                <label for="ubicacion">Location: *</label>
+                <input type="text" class="form-control" id="ubicacion" name="ubicacion"
+                  placeholder="Place your location" required>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-12">
+        <div class="card card-dark">
+          <div class="card-header">
+            <h3 class="card-title">Profesional resumen</h3>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-lg-6">
+                <label for="resumen">Brief summary: (Optional)</label>
+                <textarea class="form-control" id="resumen" name="resumen" rows="4"
+                  placeholder="Highlight your skills, experience and key achievements"></textarea>
+              </div>
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label for="objetivo">Professional objective or statement of purpose (optional):</label>
+                  <textarea class="form-control" id="objetivo" name="objetivo" rows="4"
+                    placeholder="Enter your career goal or purpose statement"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="row"></div>
+            <div class="row"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-12">
+        <div class="card card-dark">
+          <div class="card-header">
+            <h3 class="card-title">Experience</h3>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-lg-6">
+                <label for="nombreEmpresa${contadorEmpleos}">Company Name:</label>
+                <input type="text" class="form-control" id="nombreEmpresa" name="nombreEmpresaç"
+                  placeholder="Nombre de la empresa">
+              </div>
+              <div class="col-lg-6">
+                <label for="periodoTrabajo">Working period</label>
+                <input type="text" class="form-control" id="periodoTrabajo" name="periodoTrabajo"
+                  placeholder="¡(MM/AAAA - MM/AAAA)">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12">
+                <label for="responsabilidades${contadorEmpleos}">Description of responsibilities and
+                  achievements:</label>
+                <textarea class="form-control" id="responsabilidades" name="responsabilidades" rows="4"
+                  placeholder="Describa sus responsabilidades y logros en este empleo"></textarea>
+              </div>
+            </div>
+            <div class="row" style="margin-top: 15px;">
+              <div class="col-lg-4">
+                <a class="btn btn-app" id="btnAgregarMas">
+                  <i class="fas fa-plus"></i>
+                  Agregar
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-12">
+        <div class="card card-dark">
+          <div class="card-header">
+            <h3 class="card-title">Education</h3>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-lg-6">
+                <label for="institucion">Educational institution:</label>
+                <input type="text" class="form-control" id="institucion" name="institucion"
+                  placeholder="Name of The Educational institution">
+              </div>
+              <div class="col-lg-6">
+                <label for="titulo">Obtained title:</label>
+                <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Obtained title">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-6">
+                <label for="periodoEstudio">Working period:</label>
+                <input type="text" class="form-control" id="periodoEstudio" name="periodoEstudio"
+                  placeholder="(MM/AAAA - MM/AAAA)">
+              </div>
+              <div class="col-lg-6"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-12">
+        <div class="card card-dark">
+          <div class="card-header">
+            <h3 class="card-title">Skills and aptitudes</h3>
+          </div>
+          <div class="card-body">
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+  $(function () {
+    $('#reservation').daterangepicker()
+  })
+
+  $(document).ready(function () {
+    let contadorEmpleos = 1;
+
+    $("#btnAgregarMas").click(function () {
+      contadorEmpleos++;
+      let nuevoCampo = `
+      <div class="row">
+              <div class="col-lg-6">
+                <label for="nombreEmpresa${contadorEmpleos}">Company Name:</label>
+                <input type="text" class="form-control" id="nombreEmpresa${contadorEmpleos}"
+                  name="nombreEmpresa${contadorEmpleos}" placeholder="Nombre de la empresa">
+              </div>
+              <div class="col-lg-6">
+                <label for="periodoTrabajo${contadorEmpleos}">Working period</label>
+                <input type="text" class="form-control" id="periodoTrabajo${contadorEmpleos}"
+                  name="periodoTrabajo${contadorEmpleos}" placeholder="¡(MM/AAAA - MM/AAAA)">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12">
+                <label for="responsabilidades${contadorEmpleos}">Description of responsibilities and
+                  achievements:</label>
+                <textarea class="form-control" id="responsabilidades${contadorEmpleos}"
+                  name="responsabilidades${contadorEmpleos}" rows="4"
+                  placeholder="Describa sus responsabilidades y logros en este empleo"></textarea>
+              </div>
+            </div>
+            `;
+      $("#camposEmpleo").append(nuevoCampo);
+    });
+  });
+</script>
+
+
+
+
+{% endblock %}
