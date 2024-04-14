@@ -1,5 +1,6 @@
 from peewee import *
 from datetime import datetime
+from orjson import dumps, loads
 
 database = SqliteDatabase('webapp_db.db')
 
@@ -66,8 +67,7 @@ class Publicaciones(BaseModel):
 
     class Meta:
         database = database
-        
-        indexes = ((('IDUsuario', 'Fecha'), False),)
+        indexes = ((('id_usuario', 'Fecha'), False),)
 
 
 class Comentario(BaseModel):
