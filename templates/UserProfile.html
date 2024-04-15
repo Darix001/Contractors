@@ -1,0 +1,364 @@
+{% extends "base.html" %}
+{% block title %}User Profile{% endblock %}
+
+{% block iniciarSesion %}
+<div class="ml-auto">
+    <li class="nav-item d-none d-sm-inline-block">
+        <a href="/HomeUser" class="nav-link btn btn-block btn-outline-secondary btn-small">
+            <i class="fas fa-user"></i>
+            Home
+        </a>
+    </li>
+    <li class="nav-item d-none d-sm-inline-block">
+        <a href="/Home" class="nav-link">Cerrar sesión</a>
+    </li>
+</div>
+{% endblock %}
+
+{% block content %}
+
+
+<div class="container" style="margin-bottom: 50px;">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card card-dark card-tabs" style="margin-top: 20px;">
+                <div class="card-header p-0 pt-1">
+                    <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="custom-tabs-one-activity-tab" data-toggle="pill"
+                                href="#custom-tabs-one-activity" role="tab" aria-controls="custom-tabs-one-activity"
+                                aria-selected="true">Activity</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill"
+                                href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile"
+                                aria-selected="false">Profile</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content" id="custom-tabs-one-tabContent">
+                        <div class="tab-pane fade show active" id="custom-tabs-one-activity" role="tabpanel"
+                            aria-labelledby="custom-tabs-one-activity-tab">
+
+                            <!-- Box Comment -->
+                            <div class="card card-widget" style="margin-top: 50px;">
+                                <div class="card-header">
+                                    <div class="user-block">
+                                        <img class="img-circle"
+                                            src="https://img.freepik.com/foto-gratis/chico-guapo-seguro-posando-contra-pared-blanca_176420-32936.jpg"
+                                            alt="User Image">
+                                        <span class="username"><a href="#">Jonathan Burke Jr.</a></span>
+                                        <span class="description">Shared publicly - 7:30 PM Today</span>
+                                    </div>
+                                    <!-- /.user-block -->
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" title="Mark as read">
+                                            <i class="far fa-circle"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                    <!-- /.card-tools -->
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <!-- post text -->
+                                    <p>Fa far away, behind the word mountains, far from the
+                                        countries Vokalia and Consonantia, there live the blind
+                                        texts. Separated they live in Bookmarksgrove right at</p>
+
+                                    <p>the coast of the Semantics, a large language ocean.
+                                        A small river named Duden flows by their place and supplies
+                                        it with the necessary regelialia. It is a paradisematic
+                                        country, in which roasted parts of sentences fly into
+                                        your mouth.</p>
+
+                                    <!-- Attachment -->
+                                    <div class="attachment-block clearfix">
+                                        <img class="attachment-img"
+                                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKDVk8rd1557SXbmOEyPKAvhDQZkY-LHKbW44rbbAPqg&s"
+                                            alt="Attachment Image">
+
+                                        <div class="attachment-pushed">
+                                            <h4 class="attachment-heading"><a href="https://www.lipsum.com/">Lorem ipsum
+                                                    text
+                                                    generator</a></h4>
+
+                                            <div class="attachment-text">
+                                                Description about the attachment can be placed here.
+                                                Lorem Ipsum is simply dummy text of the printing and typesetting
+                                                industry... <a href="#">more</a>
+                                            </div>
+                                            <!-- /.attachment-text -->
+                                        </div>
+                                        <!-- /.attachment-pushed -->
+                                    </div>
+                                    <!-- /.attachment-block -->
+
+                                    <!-- Social sharing buttons -->
+                                    <button type="button" class="btn btn-default btn-sm"><i class="fas fa-share"></i>
+                                        Share</button>
+                                    <button type="button" class="btn btn-default btn-sm"><i
+                                            class="far fa-thumbs-up"></i> Like</button>
+                                    <span class="float-right text-muted">45 likes - 2 comments</span>
+                                </div>
+                                <!-- /.card-body -->
+                                <div class="card-footer card-comments">
+                                    <div class="card-comment">
+                                        <!-- User image -->
+                                        <img class="img-circle img-sm"
+                                            src="https://img.freepik.com/foto-gratis/retrato-hermoso-mujer-joven-posicion-pared-gris_231208-10760.jpg?size=626&ext=jpg&ga=GA1.1.1319243779.1712188800&semt=sph"
+                                            alt="User Image">
+
+                                        <div class="comment-text">
+                                            <span class="username">
+                                                Maria Gonzales
+                                                <span class="text-muted float-right">8:03 PM Today</span>
+                                            </span><!-- /.username -->
+                                            It is a long established fact that a reader will be distracted
+                                            by the readable content of a page when looking at its layout.
+                                        </div>
+                                        <!-- /.comment-text -->
+                                    </div>
+                                    <!-- /.card-comment -->
+                                    <div class="card-comment">
+                                        <!-- User image -->
+                                        <img class="img-circle img-sm"
+                                            src="https://img.freepik.com/foto-gratis/chica-rubia-coqueta-mirando-amera-expresion-cara-astuta-sonriente-tiene-idea-pie-contra-fondo-blanco_176420-54508.jpg"
+                                            alt="User Image">
+
+                                        <div class="comment-text">
+                                            <span class="username">
+                                                Nora Havisham
+                                                <span class="text-muted float-right">8:03 PM Today</span>
+                                            </span><!-- /.username -->
+                                            The point of using Lorem Ipsum is that it hrs a morer-less
+                                            normal distribution of letters, as opposed to using
+                                            'Content here, content here', making it look like readable English.
+                                        </div>
+                                        <!-- /.comment-text -->
+                                    </div>
+                                    <!-- /.card-comment -->
+                                </div>
+                                <!-- /.card-footer -->
+                                <div class="card-footer">
+                                    <form action="#" method="post">
+                                        <img class="img-fluid img-circle img-sm"
+                                            src="https://images.hola.com/imagenes/estar-bien/20221018219233/buenas-personas-caracteristicas/1-153-242/getty-chica-feliz-t.jpg?tx=w_680"
+                                            alt="Alt Text">
+                                        <!-- .img-push is used to add margin to elements next to floating images -->
+                                        <div class="img-push">
+                                            <input type="text" class="form-control form-control-sm"
+                                                placeholder="Press enter to post comment">
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- /.card-footer -->
+                            </div>
+                            <!-- /.card -->
+
+
+
+                        </div>
+                        <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel"
+                            aria-labelledby="custom-tabs-one-profile-tab">
+                            <div class="col-lg-12">
+                                <div style="margin-bottom: 10px;">
+                                    <a href="/Edit">
+                                        <button type="button" class="btn btn-dark">Editar</button>
+                                    </a>
+                                </div>
+                                
+                                <div class="card card-dark">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Personal information</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="photo-container"
+                                                    style="width: 100%; height: 320px; border: 2px solid; margin-bottom: 10px; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative;">
+                                                    <img id="previewImage" width="250px" height="300px" src="#"
+                                                        alt="Preview" style="object-fit: contain; display: none;">
+                                                </div>
+                                                <!-- <input type="file" id="inputFile" class="d-none">
+                                                <label for="inputFile"
+                                                    class="btn btn-success col fileinput-button dz-clickable">
+                                                    <i class="fas fa-plus"></i>
+                                                    <span>Add Photo</span>
+                                                </label> -->
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <label for="nombreCompleto">Full Name:</label>
+                                                <input type="text" class="form-control" id="nombreCompleto"
+                                                    name="nombreCompleto" placeholder="Full Name" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <label for="tituloProfesional">Current title or professional
+                                                    position:</label>
+                                                <select class="form-control" id="tituloProfesional"
+                                                    name="tituloProfesional" disabled>
+                                                    <option value="">Select</option>
+                                                    <option value="estudios incompletos">No studies or incomplete school
+                                                        studies</option>
+                                                    <option value="Bachillerato">High School</option>
+                                                    <option value="Licenciatura">Degree</option>
+                                                    <option value="Maestría">Master's degree</option>
+                                                    <option value="Doctorado">Doctorate</option>
+                                                    <!-- Agrega más opciones según necesites -->
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <label for="ubicacion">Location:</label>
+                                                <input type="text" class="form-control" id="ubicacion" name="ubicacion"
+                                                    placeholder="Place your location" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <div class="card card-dark">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Profesional resumen</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <label for="resumen">Brief summary: (Optional)</label>
+                                                <textarea class="form-control" id="resumen" name="resumen" rows="4"
+                                                    placeholder="Highlight your skills, experience and key achievements"
+                                                    disabled></textarea>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="objetivo">Professional objective or statement of purpose
+                                                        (optional):</label>
+                                                    <textarea class="form-control" id="objetivo" name="objetivo"
+                                                        rows="4"
+                                                        placeholder="Enter your career goal or purpose statement"
+                                                        disabled></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row"></div>
+                                        <div class="row"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <div class="card card-dark">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Experience</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <label for="nombreEmpresa${contadorEmpleos}">Company Name:</label>
+                                                <input type="text" class="form-control" id="nombreEmpresa"
+                                                    name="nombreEmpresaç" placeholder="Nombre de la empresa" disabled>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <label for="periodoTrabajo">Working period</label>
+                                                <input type="text" class="form-control" id="periodoTrabajo"
+                                                    name="periodoTrabajo" placeholder="(MM/AAAA - MM/AAAA)" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <label for="responsabilidades${contadorEmpleos}">Description of
+                                                    responsibilities and
+                                                    achievements:</label>
+                                                <textarea class="form-control" id="responsabilidades"
+                                                    name="responsabilidades" rows="4"
+                                                    placeholder="Describa sus responsabilidades y logros en este empleo"
+                                                    disabled></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <div class="card card-dark">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Education</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <label for="institucion">Educational institution:</label>
+                                                <input type="text" class="form-control" id="institucion"
+                                                    name="institucion" placeholder="Name of The Educational institution"
+                                                    disabled>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <label for="titulo">Obtained title:</label>
+                                                <input type="text" class="form-control" id="titulo" name="titulo"
+                                                    placeholder="Obtained title" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <label for="periodoEstudio">Working period:</label>
+                                                <input type="text" class="form-control" id="periodoEstudio"
+                                                    name="periodoEstudio" placeholder="(MM/AAAA - MM/AAAA)" disabled>
+                                            </div>
+                                            <div class="col-lg-6"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <div class="card card-dark">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Skills and aptitudes</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width: 10px;">#</th>
+                                                            <th>Skills or Aptitudes</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tablaHabilidades">
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
