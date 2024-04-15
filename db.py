@@ -1,6 +1,5 @@
 from peewee import *
 from datetime import datetime
-from orjson import dumps, loads
 
 database = SqliteDatabase('webapp_db.db')
 
@@ -16,7 +15,7 @@ class BaseModel(Model):
 
 class Usuarios(BaseModel):
     id_usuario = AutoField(column_name='IDUsuario', null=True)
-    
+
     nombre = CharField(column_name='Nombre', null=True)
     
     apellido = CharField(column_name='Apellido', null=True)

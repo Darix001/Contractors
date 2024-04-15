@@ -19,6 +19,7 @@ choice = MethodType(choice, range(10000000, 100000000))
 with open('config.json', 'rb') as config:
     config = loads(config.read())
 
+
 @app.before_request
 def connect():
     database.connect()
@@ -50,8 +51,8 @@ def main():
 def Login(form, /):
     try:
         app.current_user = Usuarios.get(
-            Usuarios.usuario == form.get('clave'),
-            Usuarios.clave == form.get('usuario')
+            Usuarios.usuario == form.get('usuario'),
+            Usuarios.clave == form.get('clave')
         )
     except Usuarios.DoesNotExist:
         return 'Incorrect user or password'
@@ -68,7 +69,7 @@ def Register(form, /):
     except IntegrityError:
         return 'Invalid Username'
     else:
-        return redirect(url_for('email', name = 'Password'))
+        return redirect(url_for('email', name = 'HomeUser'))
 
 @app.route('/email/<name>')
 def email(name:str):
@@ -122,9 +123,10 @@ def user_page(obj):
     name = obj.__name__
     filename = name + '.html'
     def function():
-        if (usuario := getattr(app, 'current_user', None)) is None:
-            if request.method == 'POST':
-                return obj(request.form)
+        if not (usuario := getattr(app, 'current_user', None)):
+            redirect(url_for('Login'))
+        if request.method == 'POST':
+            return obj(request.form)
         return render_template(filename, **usuario.__data__)
     return app.route('/' + name)(update_wrapper(function, obj))
 
