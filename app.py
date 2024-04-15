@@ -133,6 +133,10 @@ def HomeUser():
     data = app.current_user.__data__
     return render_template('HomeUser.html', **data)
 
+@app.route('/UserProfile')
+def user_profile():
+    return render_template('UserProfile.html')
+
 
 if __name__ == '__main__':
     app.config.update(

@@ -6,7 +6,7 @@
 {% block iniciarSesion %}
 <div class="ml-auto">
   <li class="nav-item d-none d-sm-inline-block">
-    <a href="#" class="nav-link btn btn-block btn-outline-secondary btn-small">
+    <a href="/UserProfile" class="nav-link btn btn-block btn-outline-secondary btn-small">
       <i class="fas fa-user"></i>
       Mi perfil
     </a>
@@ -28,6 +28,20 @@
             <h3 class="card-title">Personal information</h3>
           </div>
           <div class="card-body">
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="photo-container"
+                  style="width: 100%; height: 320px; border: 2px solid; margin-bottom: 10px; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative;">
+                  <img id="previewImage" width="250px" height="300px" src="#" alt="Preview"
+                    style="object-fit: contain; display: none;">
+                </div>
+                <input type="file" id="inputFile" class="d-none">
+                <label for="inputFile" class="btn btn-success col fileinput-button dz-clickable">
+                  <i class="fas fa-plus"></i>
+                  <span>Add Photo</span>
+                </label>
+              </div>
+            </div>
             <div class="row">
               <div class="col-lg-12">
                 <label for="nombreCompleto">Full Name: *</label>
@@ -112,6 +126,8 @@
                   placeholder="Describa sus responsabilidades y logros en este empleo"></textarea>
               </div>
             </div>
+            <div id="camposEmpleo">
+            </div>
             <div class="row" style="margin-top: 15px;">
               <div class="col-lg-4">
                 <a class="btn btn-app" id="btnAgregarMas">
@@ -159,53 +175,127 @@
             <h3 class="card-title">Skills and aptitudes</h3>
           </div>
           <div class="card-body">
+            <div class="row">
+              <div class="col-lg-6">
+                <label for="habilidadesInput">Enter Skills or Aptitudes</label>
+                <input type="text" class="form-control"
+                  placeholder="Example: Languages, Software, Technical or Soft Skills" id="habilidadesInput" />
+                <button type="button" class="btn btn-dark" id="btnAgregarHabilidad" style="margin-top: 10px;">Add Skill
+                  or Aptitude</button>
+              </div>
+              <div class="col-lg-6">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th style="width: 10px;">#</th>
+                      <th>Skills or Aptitudes</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tablaHabilidades">
 
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
+
+
+
+      </div>
+      <div class="col-lg-6">
+        <input type="submit" class="btn btn-dark" value="Guardar">
+        <a href="{{ url_for('HomeUser')}}">
+          <button type="button" class="btn btn-danger">Cancelar</button>
+        </a>
+      </div>
+      <div class="col-lg-6">
       </div>
     </div>
   </form>
 </div>
 
+
+
+
+
+
+{% endblock %}
+
+{% block scripts %}
 <script>
-  $(function () {
-    $('#reservation').daterangepicker()
-  })
+
 
   $(document).ready(function () {
     let contadorEmpleos = 1;
+    let contadorHabilidades = 1;
 
+    $(function () {
+      $('#reservation').daterangepicker()
+    });
+
+    // Función para agregar habilidades a la tabla
+    $("#btnAgregarHabilidad").click(function () {
+      let habilidad = $("#habilidadesInput").val();
+      if (habilidad.trim() !== "") {
+        let fila = `
+        <tr>
+          <td>${contadorHabilidades}</td>
+          <td>${habilidad}</td>
+        </tr>
+      `;
+        $("#tablaHabilidades").append(fila);
+        contadorHabilidades++;
+        $("#habilidadesInput").val("");
+      }
+    });
+
+    // Cuando se selecciona un archivo en el input de tipo file
+    $("#inputFile").change(function () {
+      readURL(this);
+    });
+
+    // Función para leer la URL del archivo seleccionado y mostrar la imagen en la vista previa
+    function readURL(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          $('#previewImage').attr('src', e.target.result).show();
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    // Función para agregar nuevos campos de experiencia laboral
     $("#btnAgregarMas").click(function () {
       contadorEmpleos++;
       let nuevoCampo = `
-      <div class="row">
-              <div class="col-lg-6">
-                <label for="nombreEmpresa${contadorEmpleos}">Company Name:</label>
-                <input type="text" class="form-control" id="nombreEmpresa${contadorEmpleos}"
-                  name="nombreEmpresa${contadorEmpleos}" placeholder="Nombre de la empresa">
-              </div>
-              <div class="col-lg-6">
-                <label for="periodoTrabajo${contadorEmpleos}">Working period</label>
-                <input type="text" class="form-control" id="periodoTrabajo${contadorEmpleos}"
-                  name="periodoTrabajo${contadorEmpleos}" placeholder="¡(MM/AAAA - MM/AAAA)">
-              </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <label for="nombreEmpresa${contadorEmpleos}">Company Name:</label>
+                    <input type="text" class="form-control" id="nombreEmpresa${contadorEmpleos}"
+                        name="nombreEmpresa${contadorEmpleos}" placeholder="Nombre de la empresa">
+                </div>
+                <div class="col-lg-6">
+                    <label for="periodoTrabajo${contadorEmpleos}">Working period</label>
+                    <input type="text" class="form-control" id="periodoTrabajo${contadorEmpleos}"
+                        name="periodoTrabajo${contadorEmpleos}" placeholder="¡(MM/AAAA - MM/AAAA)">
+                </div>
             </div>
             <div class="row">
-              <div class="col-lg-12">
-                <label for="responsabilidades${contadorEmpleos}">Description of responsibilities and
-                  achievements:</label>
-                <textarea class="form-control" id="responsabilidades${contadorEmpleos}"
-                  name="responsabilidades${contadorEmpleos}" rows="4"
-                  placeholder="Describa sus responsabilidades y logros en este empleo"></textarea>
-              </div>
+                <div class="col-lg-12">
+                    <label for="responsabilidades${contadorEmpleos}">Description of responsibilities and
+                        achievements:</label>
+                    <textarea class="form-control" id="responsabilidades${contadorEmpleos}"
+                        name="responsabilidades${contadorEmpleos}" rows="4"
+                        placeholder="Describa sus responsabilidades y logros en este empleo"></textarea>
+                </div>
             </div>
             `;
       $("#camposEmpleo").append(nuevoCampo);
     });
   });
+
 </script>
-
-
-
 
 {% endblock %}
