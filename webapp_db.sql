@@ -34,6 +34,9 @@ CREATE TABLE "publicaciones" (
 	 "Modalidad" INTEGER,
 	 "Area" VARCHAR(255),
 	 "Fecha" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	 "Educacion" VARCHAR(255),
+	 "Habilidades" VARCHAR(255),
+	 "Notas" VARCHAR(255),
 	 FOREIGN KEY ("IDUsuario") REFERENCES "usuarios" ("IDUsuario"),
 	 FOREIGN KEY ("Modalidad") REFERENCES "modalidad" ("IdModalidad")
 	 )
