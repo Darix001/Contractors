@@ -46,11 +46,9 @@ class Usuarios(BaseModel):
 
     localizacion = CharField(column_name='Localizacion', default='')
 
-    json_columns = {
-    'experiencia':('nombreEmpresa','periodoTrabajo','responsabilidades'),
-    'educacion':("institucion",'titulo','periodoEstudio')}
-
-    json_names = sum(json_columns.values(),())
+    jsons = {
+    'experiencia':('nombreEmpresa_','periodoTrabajo_','responsabilidades_'),
+    'educacion':("institucion_",'titulo_','periodoEstudio_')}
 
 
 class Modalidad(BaseModel):

@@ -3,10 +3,10 @@ from db import database, Usuarios
 from validate_email import validate_email
 from functools import partial, update_wrapper
 from peewee import IntegrityError
-from itertools import groupby
 from smtplib import SMTP_SSL
 from orjson import loads
 from os import urandom
+
 
 app = Flask(__name__)
 
@@ -127,13 +127,13 @@ def user_page(obj):
         return render_template(filename, **usuario.__data__)
     return app.route('/' + name)(update_wrapper(function, obj))
 
-@user_page  
+@user_page
 def Edit(form, /):
     usuario = app.current_user
     data = usuario.__data__
-    json_names = usuario.json_names
-    data|={k:(v if k in json_names else v[0]) for k,v in dict.items(form)}
-    for field, keys in usuario.json_columns.items():
+    data['habilidades'] = dict.pop(form, 'habilidades')
+    data|={k:(v if k.endswith('_') else v[0]) for k, v in dict.items(form)}
+    for field, keys in usuario.jsons.items():
         data[field] = [*zip(*map(data.pop, keys))]
     usuario.save()
     return redirect(url_for('HomeUser'))
@@ -145,6 +145,7 @@ def HomeUser(form, /):
 @user_page
 def UserProfile(form, /):
     pass
+
 
 if __name__ == '__main__':
     app.config.update(
