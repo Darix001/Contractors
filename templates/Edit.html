@@ -2,7 +2,6 @@
 {% block title %}Edit{% endblock %}
 
 
-
 {% block iniciarSesion %}
 <div class="ml-auto">
   <li class="nav-item d-none d-sm-inline-block">
@@ -35,7 +34,7 @@
                   <img id="previewImage" width="250px" height="300px" src="#" alt="Preview"
                     style="object-fit: contain; display: none;">
                 </div>
-                <input type="file" id="inputFile" class="d-none">
+                <input type="file" id="inputFile" class="d-none" name="foto">
                 <label for="inputFile" class="btn btn-success col fileinput-button dz-clickable">
                   <i class="fas fa-plus"></i>
                   <span>Add Photo</span>
@@ -44,15 +43,20 @@
             </div>
             <div class="row">
               <div class="col-lg-12">
-                <label for="nombreCompleto">Full Name: *</label>
-                <input type="text" class="form-control" id="nombreCompleto" name="nombreCompleto"
+                <label for="nombre">Full Name: *</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" value="{{nombre}}"
                   placeholder="Full Name" required>
               </div>
             </div>
             <div class="row">
               <div class="col-lg-12">
-                <label for="tituloProfesional">Current title or professional position: *</label>
-                <select class="form-control" id="tituloProfesional" name="tituloProfesional" required>
+                <label for="titulo_profesional">Current title or professional position: *</label>
+                <select class="form-control" id="titulo_profesional" name="titulo_profesional" required>
+                  {% if titulo_profesional %}
+                  <option selected="selected">
+                    {{titulo_profesional}}
+                  </option>
+                  {% endif %}
                   <option value="">Select</option>
                   <option value="estudios incompletos">No studies or incomplete school studies</option>
                   <option value="Bachillerato">High School</option>
@@ -65,9 +69,9 @@
             </div>
             <div class="row">
               <div class="col-lg-12">
-                <label for="ubicacion">Location: *</label>
-                <input type="text" class="form-control" id="ubicacion" name="ubicacion"
-                  placeholder="Place your location" required>
+                <label for="localizacion">Location: *</label>
+                <input type="text" class="form-control" id="localizacion" name="localizacion"
+                  placeholder="Place your location" value="{{localizacion}}" required>
               </div>
             </div>
           </div>
@@ -84,13 +88,13 @@
               <div class="col-lg-6">
                 <label for="resumen">Brief summary: (Optional)</label>
                 <textarea class="form-control" id="resumen" name="resumen" rows="4"
-                  placeholder="Highlight your skills, experience and key achievements"></textarea>
+                  placeholder="Highlight your skills, experience and key achievements">{{resumen}}</textarea>
               </div>
               <div class="col-lg-6">
                 <div class="form-group">
                   <label for="objetivo">Professional objective or statement of purpose (optional):</label>
                   <textarea class="form-control" id="objetivo" name="objetivo" rows="4"
-                    placeholder="Enter your career goal or purpose statement"></textarea>
+                    placeholder="Enter your career goal or purpose statement">{{objetivo}}</textarea>
                 </div>
               </div>
             </div>
@@ -106,10 +110,34 @@
             <h3 class="card-title">Experience</h3>
           </div>
           <div class="card-body">
+
+            {% for xp in experiencia %}
             <div class="row">
               <div class="col-lg-6">
-                <label for="nombreEmpresa${contadorEmpleos}">Company Name:</label>
-                <input type="text" class="form-control" id="nombreEmpresa" name="nombreEmpresaç"
+                <label for="nombreEmpresa">Company Name:</label>
+                <input type="text" class="form-control" id="nombreEmpresa" name="nombreEmpresa" value="{{xp[0]}}"
+                  placeholder="Nombre de la empresa">
+              </div>
+              <div class="col-lg-6">
+                <label for="periodoTrabajo">Working period</label>
+                <input type="text" class="form-control" id="periodoTrabajo" name="periodoTrabajo" value="{{xp[1]}}"
+                  placeholder="¡(MM/AAAA - MM/AAAA)">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12">
+                <label for="responsabilidades">Description of responsibilities and achievements:</label>
+                <textarea class="form-control" id="responsabilidades" name="responsabilidades" rows="4"
+                  placeholder="Describe your responsabilities and achievements on this work">{{xp[2]}}</textarea>
+              </div>
+            </div>
+
+            {% else %}
+
+            <div class="row">
+              <div class="col-lg-6">
+                <label for="nombreEmpresa">Company Name:</label>
+                <input type="text" class="form-control" id="nombreEmpresa" name="nombreEmpresa"
                   placeholder="Nombre de la empresa">
               </div>
               <div class="col-lg-6">
@@ -120,12 +148,15 @@
             </div>
             <div class="row">
               <div class="col-lg-12">
-                <label for="responsabilidades${contadorEmpleos}">Description of responsibilities and
+                <label for="responsabilidades">Description of responsibilities and
                   achievements:</label>
                 <textarea class="form-control" id="responsabilidades" name="responsabilidades" rows="4"
-                  placeholder="Describa sus responsabilidades y logros en este empleo"></textarea>
+                  placeholder="Describe your responsabilities and achievements on this work"></textarea>
               </div>
             </div>
+
+            {% endfor %}
+
             <div id="camposEmpleo">
             </div>
             <div class="row" style="margin-top: 15px;">
@@ -146,6 +177,31 @@
             <h3 class="card-title">Education</h3>
           </div>
           <div class="card-body">
+            <!-- BEGIN FOR EDUCATION -->
+            {% for edu in educacion %}
+            <div class="row">
+              <div class="col-lg-6">
+                <label for="institucion">Educational institution:</label>
+                <input type="text" class="form-control" id="institucion" name="institucion" value="{{edu[0]}}"
+                  placeholder="Name of The Educational institution">
+              </div>
+              <div class="col-lg-6">
+                <label for="titulo">Obtained title:</label>
+                <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Obtained title"
+                  value="{{edu[1]}}">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-6">
+                <label for="periodoEstudio">Working period:</label>
+                <input type="text" class="form-control" id="periodoEstudio" name="periodoEstudio" value="{{edu[2]}}"
+                  placeholder="(MM/AAAA - MM/AAAA)">
+              </div>
+              <div class="col-lg-6"></div>
+            </div>
+
+            {% else %}
+
             <div class="row">
               <div class="col-lg-6">
                 <label for="institucion">Educational institution:</label>
@@ -164,6 +220,18 @@
                   placeholder="(MM/AAAA - MM/AAAA)">
               </div>
               <div class="col-lg-6"></div>
+            </div>
+
+            {% endfor %}
+
+            <div id="camposEducacion"></div>
+            <div class="row" style="margin-top: 15px;">
+              <div class="col-lg-4">
+                <a class="btn btn-app" id="btnAgregarEducacion">
+                  <i class="fas fa-plus"></i>
+                  Agregar
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -193,7 +261,12 @@
                     </tr>
                   </thead>
                   <tbody id="tablaHabilidades">
-
+                    {% for habilidad in habilidades %}
+                    <tr>
+                      <td>{{loop.index0}}</td>
+                      <td>{{habilidad}}</td>
+                    </tr>
+                    {% endfor %}
                   </tbody>
                 </table>
               </div>
@@ -206,7 +279,7 @@
       </div>
       <div class="col-lg-6">
         <input type="submit" class="btn btn-dark" value="Guardar">
-        <a href="{{ url_for('HomeUser')}}">
+        <a href="/HomeUser">
           <button type="button" class="btn btn-danger">Cancelar</button>
         </a>
       </div>
@@ -228,36 +301,33 @@
 
 
   $(document).ready(function () {
-    let contadorEmpleos = 1;
-    let contadorHabilidades = 1;
-
     $(function () {
       $('#reservation').daterangepicker()
     });
 
 
+    let contadorHabilidades = 0;
     // Función para agregar habilidades a la tabla
     $("#btnAgregarHabilidad").click(function () {
-      let habilidad = $("#habilidadesInput").val();
-      if (habilidad.trim() !== "") {
-        let fila = `
-        <tr>
-          <td>${contadorHabilidades}</td>
-          <td>${habilidad}</td>
-          <td><button type="button" class="btn btn-danger btn-sm btnEliminarSkill">Eliminar</button></td>
-        </tr>
-      `;
-        $("#tablaHabilidades").append(fila);
-        contadorHabilidades++;
-        $("#habilidadesInput").val("");
-      }
+        let habilidad = $("#habilidadesInput").val();
+        if (habilidad.trim()) {
+            contadorHabilidades++; 
+            let fila = `
+            <tr>
+                <td>${contadorHabilidades}</td> 
+                <td>${habilidad}</td>
+                <td><button type="button" class="btn btn-danger btn-sm btnEliminarSkill">Eliminar</button></td>
+            </tr>
+            `;
+            $("#tablaHabilidades").append(fila);
+            $("#habilidadesInput").val("");
+        }
     });
 
     $(document).on("click", ".btnEliminarSkill", function () {
-      $(this).closest("tr").remove();
-      // Actualizar el contador de habilidades
-      contadorHabilidades--;
-      actualizarNumeracion(); 
+        $(this).closest("tr").remove();
+        contadorHabilidades--; 
+        actualizarNumeracion();
     });
 
     // Función para actualizar la numeración de las filas
@@ -285,31 +355,53 @@
 
     // Función para agregar nuevos campos de experiencia laboral
     $("#btnAgregarMas").click(function () {
-      contadorEmpleos++;
-      let nuevoCampo = `
-            <div class="row">
+      $("#camposEmpleo").append(`
+            <div class="row" style="margin-top: 15px;">
                 <div class="col-lg-6">
-                    <label for="nombreEmpresa${contadorEmpleos}">Company Name:</label>
-                    <input type="text" class="form-control" id="nombreEmpresa${contadorEmpleos}"
-                        name="nombreEmpresa${contadorEmpleos}" placeholder="Nombre de la empresa">
+                    <label for="nombreEmpresa">Company Name:</label>
+                    <input type="text" class="form-control" id="nombreEmpresa"
+                        name="nombreEmpresa" placeholder="Nombre de la empresa">
                 </div>
                 <div class="col-lg-6">
-                    <label for="periodoTrabajo${contadorEmpleos}">Working period</label>
-                    <input type="text" class="form-control" id="periodoTrabajo${contadorEmpleos}"
-                        name="periodoTrabajo${contadorEmpleos}" placeholder="¡(MM/AAAA - MM/AAAA)">
+                    <label for="periodoTrabajo">Working period</label>
+                    <input type="text" class="form-control" id="periodoTrabajo"
+                        name="periodoTrabajo" placeholder="¡(MM/AAAA - MM/AAAA)">
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-12">
-                    <label for="responsabilidades${contadorEmpleos}">Description of responsibilities and
+                    <label for="responsabilidades">Description of responsibilities and
                         achievements:</label>
-                    <textarea class="form-control" id="responsabilidades${contadorEmpleos}"
-                        name="responsabilidades${contadorEmpleos}" rows="4"
+                    <textarea class="form-control" id="responsabilidades"
+                        name="responsabilidades" rows="4"
                         placeholder="Describa sus responsabilidades y logros en este empleo"></textarea>
                 </div>
             </div>
-            `;
-      $("#camposEmpleo").append(nuevoCampo);
+            `);
+    });
+
+    // Función para agregar nuevos campos de Educación
+    $("#btnAgregarEducacion").click(function () {
+      $("#camposEducacion").append(`<div class="row" style="margin-top: 15px;">
+              <div class="col-lg-6">
+                <label for="institucion">Educational institution:</label>
+                <input type="text" class="form-control" id="institucion" name="institucion"
+                  placeholder="Name of The Educational institution">
+              </div>
+              <div class="col-lg-6">
+                <label for="titulo">Obtained title:</label>
+                <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Obtained title">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-6">
+                <label for="periodoEstudio">Working period:</label>
+                <input type="text" class="form-control" id="periodoEstudio" name="periodoEstudio"
+                  placeholder="(MM/AAAA - MM/AAAA)">
+              </div>
+              <div class="col-lg-6"></div>
+            </div>
+          </div>`);
     });
   });
 

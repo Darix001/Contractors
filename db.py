@@ -1,12 +1,15 @@
 from peewee import *
 from datetime import datetime
-from orjson import dumps, loads
+from orjson import loads, dumps
 
 database = SqliteDatabase('webapp_db.db')
 
-class StringListField(TextField):
-    def python_value(self, value:str) -> list[str]:
-        return value.split(',')
+DEFAULT_LIST = []
+
+
+class JsonField(BlobField):
+    db_value = dumps
+    python_value = loads
 
 
 class BaseModel(Model):
@@ -16,26 +19,38 @@ class BaseModel(Model):
 
 class Usuarios(BaseModel):
     id_usuario = AutoField(column_name='IDUsuario', null=True)
-    
-    nombre = CharField(column_name='Nombre', null=True)
-    
-    apellido = CharField(column_name='Apellido', null=True)
-    
-    email = CharField(column_name='Email', null=True)
-    
-    usuario = CharField(column_name='Usuario', null=True, unique=True)
-    
-    clave = CharField(column_name='Clave', null=True)
-    
-    profesion = CharField(column_name='Profesion', default='')
-    
-    telefono = IntegerField(column_name='Telefono', default='')
 
-    educacion = TextField(column_name='Educacion', default='')
+    usuario = CharField(column_name='Usuario', unique=True)
 
-    habilidades = StringListField(column_name='Habilidades', default='')
+    foto = BlobField(column_name='Foto', default=b'')
+    
+    clave = CharField(column_name='Clave')
+    
+    email = CharField(column_name='Email')
+    
+    nombre = CharField(column_name='Nombre')
+    
+    telefono = CharField(12, column_name='Telefono', default='')
+    
+    titulo_profesional = CharField(column_name='Titulo_Profesional', default='')
 
-    notas = TextField(column_name='Notas', default='')
+    educacion = JsonField(column_name='Educacion', default=DEFAULT_LIST)
+
+    habilidades = JsonField(column_name='Habilidades', default=DEFAULT_LIST)
+
+    experiencia = JsonField(column_name='Experiencia', default=DEFAULT_LIST)
+
+    resumen = TextField(column_name = 'Resumen', default='')
+
+    objetivo = TextField(column_name = 'Objetivo', default='')
+
+    localizacion = CharField(column_name='Localizacion', default='')
+
+    json_columns = {
+    'experiencia':('nombreEmpresa','periodoTrabajo','responsabilidades'),
+    'educacion':("institucion",'titulo','periodoEstudio')}
+
+    json_names = sum(json_columns.values(),())
 
 
 class Modalidad(BaseModel):
@@ -48,9 +63,9 @@ class Publicaciones(BaseModel):
     id_publicacion = AutoField(column_name='IDPublicacion', null=True)
     
     id_usuario = ForeignKeyField(column_name='IDUsuario', field='id_usuario',
-        model=Usuarios, null=True)
+        model=Usuarios)
     
-    titulo = CharField(column_name='Titulo', null=True)
+    titulo = CharField(column_name='Titulo')
     
     descripcion = CharField(column_name='Descripcion', null=True)
     
@@ -125,3 +140,5 @@ class Solicitudes(BaseModel):
 
 database.create_tables((Usuarios,Modalidad,Publicaciones,Comentario,Estatus,
     EtiquetaReaccion,Reacciones,Solicitudes))
+
+del dumps,loads

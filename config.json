@@ -1,5 +1,5 @@
 {
 	"gmail":"contractors.webapp@gmail.com",
-	"msg":"Content-Type: text/plain; charset=\"us-ascii\"\nMIME-Version: 1.0\nContent-Transfer-Encoding: 7bit\nfrom: contractors.webapp@gmail.com\nto: {email}\nsubject: Change Password\n\nYour Verification Code is: {code}",
+	"msg":"Content-Type: text/plain; charset=\"us-ascii\"\nMIME-Version: 1.0\nContent-Transfer-Encoding: 7bit\nfrom: contractors.webapp@gmail.com\nto: {email}\nsubject: Verification Code\n\nYour Verification Code is: {code}",
 	"key":"fvskeowwfhrhxpqn"
 }

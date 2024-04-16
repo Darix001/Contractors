@@ -54,7 +54,7 @@
             <!-- Profile Image -->
             <div class="card card-dark card-widget widget-user" style="margin-top: 50px;">
                 <div class="widget-user-header bg-dark">
-                    <h3 class="widget-user-username">{{nombre}}</h3>
+                    <h3 class="widget-user-username">{{usuario}}</h3>
                     <h5 class="widget-user-desc">{{profesion}}</h5>
                 </div>
                 <div class="widget-user-image">
@@ -112,7 +112,8 @@
         </div>
         <div class="col-lg-8">
             <!-- Botón para mostrar formulario de creación de publicación -->
-            <button type="button" class="btn btn-dark" id="btnMostrarFormulario" style="margin-top: 20px;">Crear Publicación</button>
+            <button type="button" class="btn btn-dark" id="btnMostrarFormulario" style="margin-top: 20px;">Crear
+                Publicación</button>
 
             <!-- Formulario de creación de publicaciones (inicialmente oculto) -->
             <div class="card card-widget" id="formularioPublicacion" style="margin-top: 20px; display: none;">
@@ -129,6 +130,16 @@
                             <label for="contenido">Contenido:</label>
                             <textarea class="form-control" id="contenido" name="contenido" rows="4" required></textarea>
                         </div>
+                        <div class="photo-container"
+                            style="width: 100%; height: 320px; border: 2px solid; margin-bottom: 10px; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative;">
+                            <img id="previewImage" width="250px" height="300px" src="#" alt="Preview"
+                                style="object-fit: contain; display: none;">
+                        </div>
+                        <input type="file" id="inputFile" class="d-none" name="foto">
+                        <label for="inputFile" class="btn btn-success col fileinput-button dz-clickable">
+                            <i class="fas fa-plus"></i>
+                            <span>Add Photo</span>
+                        </label>
                         <button type="submit" class="btn btn-dark">Publicar</button>
                         <button type="button" class="btn btn-danger" id="btnCancelar">Cancelar</button>
                     </form>
@@ -268,19 +279,38 @@
 {% block scripts %}
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    const btnMostrarFormulario = document.getElementById('btnMostrarFormulario');
-    const formularioPublicacion = document.getElementById('formularioPublicacion');
-    const btnCancelar = document.getElementById('btnCancelar');
+    document.addEventListener('DOMContentLoaded', function () {
+        const btnMostrarFormulario = document.getElementById('btnMostrarFormulario');
+        const formularioPublicacion = document.getElementById('formularioPublicacion');
+        const btnCancelar = document.getElementById('btnCancelar');
 
-    btnMostrarFormulario.addEventListener('click', function() {
-        formularioPublicacion.style.display = 'block';
+        btnMostrarFormulario.addEventListener('click', function () {
+            formularioPublicacion.style.display = 'block';
+        });
+
+        btnCancelar.addEventListener('click', function () {
+            formularioPublicacion.style.display = 'none';
+        });
     });
 
-    btnCancelar.addEventListener('click', function() {
-        formularioPublicacion.style.display = 'none';
+    $(document).ready(function () {
+       // Cuando se selecciona un archivo en el input de tipo file
+    $("#inputFile").change(function () {
+      readURL(this);
     });
-});
+
+    // Función para leer la URL del archivo seleccionado y mostrar la imagen en la vista previa
+    function readURL(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          $('#previewImage').attr('src', e.target.result).show();
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+    });
+
 </script>
 
 {% endblock %}
