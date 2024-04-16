@@ -111,8 +111,33 @@
 
         </div>
         <div class="col-lg-8">
+            <!-- Botón para mostrar formulario de creación de publicación -->
+            <button type="button" class="btn btn-dark" id="btnMostrarFormulario" style="margin-top: 20px;">Crear Publicación</button>
+
+            <!-- Formulario de creación de publicaciones (inicialmente oculto) -->
+            <div class="card card-widget" id="formularioPublicacion" style="margin-top: 20px; display: none;">
+                <div class="card-header">
+                    <h3 class="card-title">Crear nueva publicación</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="/crear_publicacion">
+                        <div class="form-group">
+                            <label for="titulo">Título:</label>
+                            <input type="text" class="form-control" id="titulo" name="titulo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contenido">Contenido:</label>
+                            <textarea class="form-control" id="contenido" name="contenido" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-dark">Publicar</button>
+                        <button type="button" class="btn btn-danger" id="btnCancelar">Cancelar</button>
+                    </form>
+                </div>
+            </div>
+
+
             <!-- Box Comment -->
-            <div class="card card-widget" style="margin-top: 50px;">
+            <div class="card card-widget" style="margin-top: 20px;">
                 <div class="card-header">
                     <div class="user-block">
                         <img class="img-circle"
@@ -171,7 +196,8 @@
 
                     <!-- Social sharing buttons -->
                     <button type="button" class="btn btn-default btn-sm"><i class="fas fa-share"></i> Share</button>
-                    <button type="button" class="btn btn-default btn-sm"><i class="far fa-thumbs-up"></i> Like</button>
+                    <button type="button" class="btn btn-default btn-sm"><i class="far fa-thumbs-up"></i>
+                        Like</button>
                     <span class="float-right text-muted">45 likes - 2 comments</span>
                 </div>
                 <!-- /.card-body -->
@@ -229,12 +255,32 @@
             </div>
             <!-- /.card -->
 
-           
+
         </div>
     </div>
 
 
 
 </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const btnMostrarFormulario = document.getElementById('btnMostrarFormulario');
+    const formularioPublicacion = document.getElementById('formularioPublicacion');
+    const btnCancelar = document.getElementById('btnCancelar');
+
+    btnMostrarFormulario.addEventListener('click', function() {
+        formularioPublicacion.style.display = 'block';
+    });
+
+    btnCancelar.addEventListener('click', function() {
+        formularioPublicacion.style.display = 'none';
+    });
+});
+</script>
 
 {% endblock %}

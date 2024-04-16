@@ -5,7 +5,6 @@ from functools import partial, update_wrapper
 from peewee import IntegrityError
 from itertools import groupby
 from smtplib import SMTP_SSL
-from secrets import choice
 from orjson import loads
 from os import urandom
 
@@ -13,10 +12,12 @@ app = Flask(__name__)
 
 app.route = partial(app.route, methods=('POST', 'GET'))
 
-keys = range(10000000, 100000000)
-
 with open('config.json', 'rb') as config:
     config = loads(config.read())
+
+
+def getcode() -> int:
+    return int.from_bytes(urandom(3))
 
 @app.before_request
 def connect():
@@ -54,7 +55,6 @@ def Login(form, /):
     except Usuarios.DoesNotExist:
         return 'Incorrect user or password'
     else:
-        print(app.current_user.__data__)
         return redirect(url_for('HomeUser'))
 
 @post(text = 'Register a new account')
@@ -127,7 +127,7 @@ def user_page(obj):
         return render_template(filename, **usuario.__data__)
     return app.route('/' + name)(update_wrapper(function, obj))
 
-@user_page
+@user_page  
 def Edit(form, /):
     usuario = app.current_user
     data = usuario.__data__
@@ -150,5 +150,6 @@ if __name__ == '__main__':
     app.config.update(
         SECRET_KEY = urandom(32),
         DEBUG = True,
-        TESTING = True)
+        TESTING = True
+        )
     app.run()
