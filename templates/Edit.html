@@ -189,6 +189,7 @@
                     <tr>
                       <th style="width: 10px;">#</th>
                       <th>Skills or Aptitudes</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody id="tablaHabilidades">
@@ -234,6 +235,7 @@
       $('#reservation').daterangepicker()
     });
 
+
     // Función para agregar habilidades a la tabla
     $("#btnAgregarHabilidad").click(function () {
       let habilidad = $("#habilidadesInput").val();
@@ -242,6 +244,7 @@
         <tr>
           <td>${contadorHabilidades}</td>
           <td>${habilidad}</td>
+          <td><button type="button" class="btn btn-danger btn-sm btnEliminarSkill">Eliminar</button></td>
         </tr>
       `;
         $("#tablaHabilidades").append(fila);
@@ -249,6 +252,20 @@
         $("#habilidadesInput").val("");
       }
     });
+
+    $(document).on("click", ".btnEliminarSkill", function () {
+      $(this).closest("tr").remove();
+      // Actualizar el contador de habilidades
+      contadorHabilidades--;
+      actualizarNumeracion(); 
+    });
+
+    // Función para actualizar la numeración de las filas
+    function actualizarNumeracion() {
+      $("#tablaHabilidades tr").each(function (index) {
+        $(this).find("td:first").text(index + 1);
+      });
+    }
 
     // Cuando se selecciona un archivo en el input de tipo file
     $("#inputFile").change(function () {
