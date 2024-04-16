@@ -29,7 +29,7 @@
           <div class="card-body">
             <div class="row">
               <div class="col-lg-6">
-                <div class="photo-container" 
+                <div class="photo-container"
                   style="width: 100%; height: 320px; border: 2px solid; margin-bottom: 10px; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative;">
                   <img id="previewImage" width="250px" height="300px" src="#" alt="Preview"
                     style="object-fit: contain; display: none;">
@@ -44,8 +44,8 @@
             <div class="row">
               <div class="col-lg-12">
                 <label for="nombre">Full Name: *</label>
-                <input type="text" class="form-control" id="nombre" name="nombre"
-                value="{{nombre}}" placeholder="Full Name" required>
+                <input type="text" class="form-control" id="nombre" name="nombre" value="{{nombre}}"
+                  placeholder="Full Name" required>
               </div>
             </div>
             <div class="row">
@@ -53,9 +53,9 @@
                 <label for="titulo_profesional">Current title or professional position: *</label>
                 <select class="form-control" id="titulo_profesional" name="titulo_profesional" required>
                   {% if titulo_profesional %}
-                    <option selected="selected">
-                      {{titulo_profesional}}
-                    </option>
+                  <option selected="selected">
+                    {{titulo_profesional}}
+                  </option>
                   {% endif %}
                   <option value="">Select</option>
                   <option value="estudios incompletos">No studies or incomplete school studies</option>
@@ -110,52 +110,53 @@
             <h3 class="card-title">Experience</h3>
           </div>
           <div class="card-body">
-            
+
             {% for xp in experiencia %}
-              <div class="row">
-                <div class="col-lg-6">
-                  <label for="nombreEmpresa">Company Name:</label>
-                  <input type="text" class="form-control" id="nombreEmpresa" name="nombreEmpresa" value="{{xp[0]}}" placeholder="Nombre de la empresa">
-                </div>
-                <div class="col-lg-6">
-                  <label for="periodoTrabajo">Working period</label>
-                  <input type="text" class="form-control" id="periodoTrabajo" name="periodoTrabajo" value="{{xp[1]}}" 
-                    placeholder="¡(MM/AAAA - MM/AAAA)">
-                </div>
+            <div class="row">
+              <div class="col-lg-6">
+                <label for="nombreEmpresa">Company Name:</label>
+                <input type="text" class="form-control" id="nombreEmpresa" name="nombreEmpresa" value="{{xp[0]}}"
+                  placeholder="Nombre de la empresa">
               </div>
-              <div class="row">
-                <div class="col-lg-12">
-                  <label for="responsabilidades">Description of responsibilities and achievements:</label>
-                  <textarea class="form-control" id="responsabilidades" name="responsabilidades" rows="4"
-                    placeholder="Describe your responsabilities and achievements on this work">{{xp[2]}}</textarea>
-                </div>
+              <div class="col-lg-6">
+                <label for="periodoTrabajo">Working period</label>
+                <input type="text" class="form-control" id="periodoTrabajo" name="periodoTrabajo" value="{{xp[1]}}"
+                  placeholder="¡(MM/AAAA - MM/AAAA)">
               </div>
-            
+            </div>
+            <div class="row">
+              <div class="col-lg-12">
+                <label for="responsabilidades">Description of responsibilities and achievements:</label>
+                <textarea class="form-control" id="responsabilidades" name="responsabilidades" rows="4"
+                  placeholder="Describe your responsabilities and achievements on this work">{{xp[2]}}</textarea>
+              </div>
+            </div>
+
             {% else %}
 
-              <div class="row">
-                <div class="col-lg-6">
-                  <label for="nombreEmpresa">Company Name:</label>
-                  <input type="text" class="form-control" id="nombreEmpresa" name="nombreEmpresa" 
-                    placeholder="Nombre de la empresa">
-                </div>
-                <div class="col-lg-6">
-                  <label for="periodoTrabajo">Working period</label>
-                  <input type="text" class="form-control" id="periodoTrabajo" name="periodoTrabajo"
-                    placeholder="¡(MM/AAAA - MM/AAAA)">
-                </div>
+            <div class="row">
+              <div class="col-lg-6">
+                <label for="nombreEmpresa">Company Name:</label>
+                <input type="text" class="form-control" id="nombreEmpresa" name="nombreEmpresa"
+                  placeholder="Nombre de la empresa">
               </div>
-              <div class="row">
-                <div class="col-lg-12">
-                  <label for="responsabilidades">Description of responsibilities and
-                    achievements:</label>
-                  <textarea class="form-control" id="responsabilidades" name="responsabilidades" rows="4"
-                    placeholder="Describe your responsabilities and achievements on this work"></textarea>
-                </div>
+              <div class="col-lg-6">
+                <label for="periodoTrabajo">Working period</label>
+                <input type="text" class="form-control" id="periodoTrabajo" name="periodoTrabajo"
+                  placeholder="¡(MM/AAAA - MM/AAAA)">
               </div>
-            
+            </div>
+            <div class="row">
+              <div class="col-lg-12">
+                <label for="responsabilidades">Description of responsibilities and
+                  achievements:</label>
+                <textarea class="form-control" id="responsabilidades" name="responsabilidades" rows="4"
+                  placeholder="Describe your responsabilities and achievements on this work"></textarea>
+              </div>
+            </div>
+
             {% endfor %}
-            
+
             <div id="camposEmpleo">
             </div>
             <div class="row" style="margin-top: 15px;">
@@ -176,49 +177,50 @@
             <h3 class="card-title">Education</h3>
           </div>
           <div class="card-body">
-          <!-- BEGIN FOR EDUCATION -->
+            <!-- BEGIN FOR EDUCATION -->
             {% for edu in educacion %}
-              <div class="row">
-                <div class="col-lg-6">
-                  <label for="institucion">Educational institution:</label>
-                  <input type="text" class="form-control" id="institucion" name="institucion" value="{{edu[0]}}"
-                    placeholder="Name of The Educational institution">
-                </div>
-                <div class="col-lg-6">
-                  <label for="titulo">Obtained title:</label>
-                  <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Obtained title" value="{{edu[1]}}">
-                </div>
+            <div class="row">
+              <div class="col-lg-6">
+                <label for="institucion">Educational institution:</label>
+                <input type="text" class="form-control" id="institucion" name="institucion" value="{{edu[0]}}"
+                  placeholder="Name of The Educational institution">
               </div>
-              <div class="row">
-                <div class="col-lg-6">
-                  <label for="periodoEstudio">Working period:</label>
-                  <input type="text" class="form-control" id="periodoEstudio" name="periodoEstudio" value="{{edu[2]}}" 
-                    placeholder="(MM/AAAA - MM/AAAA)">
-                </div>
-                <div class="col-lg-6"></div>
+              <div class="col-lg-6">
+                <label for="titulo">Obtained title:</label>
+                <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Obtained title"
+                  value="{{edu[1]}}">
               </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-6">
+                <label for="periodoEstudio">Working period:</label>
+                <input type="text" class="form-control" id="periodoEstudio" name="periodoEstudio" value="{{edu[2]}}"
+                  placeholder="(MM/AAAA - MM/AAAA)">
+              </div>
+              <div class="col-lg-6"></div>
+            </div>
 
             {% else %}
 
-              <div class="row">
-                <div class="col-lg-6">
-                  <label for="institucion">Educational institution:</label>
-                  <input type="text" class="form-control" id="institucion" name="institucion"
-                    placeholder="Name of The Educational institution">
-                </div>
-                <div class="col-lg-6">
-                  <label for="titulo">Obtained title:</label>
-                  <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Obtained title">
-                </div>
+            <div class="row">
+              <div class="col-lg-6">
+                <label for="institucion">Educational institution:</label>
+                <input type="text" class="form-control" id="institucion" name="institucion"
+                  placeholder="Name of The Educational institution">
               </div>
-              <div class="row">
-                <div class="col-lg-6">
-                  <label for="periodoEstudio">Working period:</label>
-                  <input type="text" class="form-control" id="periodoEstudio" name="periodoEstudio"
-                    placeholder="(MM/AAAA - MM/AAAA)">
-                </div>
-                <div class="col-lg-6"></div>
+              <div class="col-lg-6">
+                <label for="titulo">Obtained title:</label>
+                <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Obtained title">
               </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-6">
+                <label for="periodoEstudio">Working period:</label>
+                <input type="text" class="form-control" id="periodoEstudio" name="periodoEstudio"
+                  placeholder="(MM/AAAA - MM/AAAA)">
+              </div>
+              <div class="col-lg-6"></div>
+            </div>
 
             {% endfor %}
 
@@ -255,14 +257,15 @@
                     <tr>
                       <th style="width: 10px;">#</th>
                       <th>Skills or Aptitudes</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody id="tablaHabilidades">
                     {% for habilidad in habilidades %}
-                      <tr>
-                        <td>{{loop.index0}}</td>
-                        <td>{{habilidad}}</td>
-                      </tr>
+                    <tr>
+                      <td>{{loop.index0}}</td>
+                      <td>{{habilidad}}</td>
+                    </tr>
                     {% endfor %}
                   </tbody>
                 </table>
@@ -302,20 +305,37 @@
       $('#reservation').daterangepicker()
     });
 
+
+    let contadorHabilidades = 0;
     // Función para agregar habilidades a la tabla
     $("#btnAgregarHabilidad").click(function () {
-      let habilidad = $("#habilidadesInput").val();
-      if (habilidad.trim()) {
-        let count = $("#tablaHabilidades").length
-        let fila = `
-        <tr>
-          <td>${count}</td>
-          <td>${habilidad}</td>
-        </tr>`;
-        $("#tablaHabilidades").append(fila);
-        $("#habilidadesInput").val("");
-      }
+        let habilidad = $("#habilidadesInput").val();
+        if (habilidad.trim()) {
+            contadorHabilidades++; 
+            let fila = `
+            <tr>
+                <td>${contadorHabilidades}</td> 
+                <td>${habilidad}</td>
+                <td><button type="button" class="btn btn-danger btn-sm btnEliminarSkill">Eliminar</button></td>
+            </tr>
+            `;
+            $("#tablaHabilidades").append(fila);
+            $("#habilidadesInput").val("");
+        }
     });
+
+    $(document).on("click", ".btnEliminarSkill", function () {
+        $(this).closest("tr").remove();
+        contadorHabilidades--; 
+        actualizarNumeracion();
+    });
+
+    // Función para actualizar la numeración de las filas
+    function actualizarNumeracion() {
+      $("#tablaHabilidades tr").each(function (index) {
+        $(this).find("td:first").text(index + 1);
+      });
+    }
 
     // Cuando se selecciona un archivo en el input de tipo file
     $("#inputFile").change(function () {
@@ -359,7 +379,7 @@
             </div>
             `);
     });
-    
+
     // Función para agregar nuevos campos de Educación
     $("#btnAgregarEducacion").click(function () {
       $("#camposEducacion").append(`<div class="row" style="margin-top: 15px;">
