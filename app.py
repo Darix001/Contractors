@@ -1,12 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for
-from db import database, Usuarios
+from db import database, Usuarios, ImageField
 from validate_email import validate_email
 from functools import partial, update_wrapper
 from peewee import IntegrityError
 from smtplib import SMTP_SSL
 from orjson import loads
 from os import urandom
-
 
 app = Flask(__name__)
 
@@ -71,7 +70,7 @@ def Register(form, /):
 
 @app.route('/email/<name>')
 def email(name:str):
-    app.code = code = f'{choice(keys)}'
+    app.code = code = f'{getcode()}'
     email = app.current_user.email
     msg = config['msg'].format_map(locals())
     with SMTP_SSL('smtp.gmail.com') as srv:
@@ -133,6 +132,8 @@ def Edit(form, /):
     data = usuario.__data__
     data['habilidades'] = dict.pop(form, 'habilidades')
     data|={k:(v if k.endswith('_') else v[0]) for k, v in dict.items(form)}
+    if file := request.files.get('foto'):
+        data['foto'] = ImageField.python_value(file.read())
     for field, keys in usuario.jsons.items():
         data[field] = [*zip(*map(data.pop, keys))]
     usuario.save()
@@ -151,6 +152,5 @@ if __name__ == '__main__':
     app.config.update(
         SECRET_KEY = urandom(32),
         DEBUG = True,
-        TESTING = True
-        )
+        TESTING = True)
     app.run()

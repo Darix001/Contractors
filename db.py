@@ -1,5 +1,6 @@
 from peewee import *
 from datetime import datetime
+from base64 import b64encode, b64decode
 from orjson import loads, dumps
 
 database = SqliteDatabase('webapp_db.db')
@@ -12,6 +13,15 @@ class JsonField(BlobField):
     python_value = loads
 
 
+class ImageField(BlobField):
+    db_value = staticmethod(b64decode)
+    @staticmethod
+    def python_value(value:bytes) -> str:
+        if value:
+            value = b64encode(value)
+        return value.decode('utf-8')
+
+
 class BaseModel(Model):
     class Meta:
         database = database
@@ -22,7 +32,7 @@ class Usuarios(BaseModel):
 
     usuario = CharField(column_name='Usuario', unique=True)
 
-    foto = BlobField(column_name='Foto', default=b'')
+    foto = ImageField(column_name='Foto', default=b'')
     
     clave = CharField(column_name='Clave')
     
@@ -139,4 +149,4 @@ class Solicitudes(BaseModel):
 database.create_tables((Usuarios,Modalidad,Publicaciones,Comentario,Estatus,
     EtiquetaReaccion,Reacciones,Solicitudes))
 
-del dumps,loads
+del dumps, loads, datetime, b64decode
