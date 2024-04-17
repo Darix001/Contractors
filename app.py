@@ -3,20 +3,21 @@ from db import database, Usuarios
 from validate_email import validate_email
 from functools import partial, update_wrapper
 from peewee import IntegrityError
-from itertools import groupby
 from smtplib import SMTP_SSL
-from secrets import choice
 from orjson import loads
 from os import urandom
+
 
 app = Flask(__name__)
 
 app.route = partial(app.route, methods=('POST', 'GET'))
 
-keys = range(10000000, 100000000)
-
 with open('config.json', 'rb') as config:
     config = loads(config.read())
+
+
+def getcode() -> int:
+    return int.from_bytes(urandom(3))
 
 @app.before_request
 def connect():
@@ -54,7 +55,6 @@ def Login(form, /):
     except Usuarios.DoesNotExist:
         return 'Incorrect user or password'
     else:
-        print(app.current_user.__data__)
         return redirect(url_for('HomeUser'))
 
 @post(text = 'Register a new account')
@@ -131,9 +131,9 @@ def user_page(obj):
 def Edit(form, /):
     usuario = app.current_user
     data = usuario.__data__
-    json_names = usuario.json_names
-    data|={k:(v if k in json_names else v[0]) for k,v in dict.items(form)}
-    for field, keys in usuario.json_columns.items():
+    data['habilidades'] = dict.pop(form, 'habilidades')
+    data|={k:(v if k.endswith('_') else v[0]) for k, v in dict.items(form)}
+    for field, keys in usuario.jsons.items():
         data[field] = [*zip(*map(data.pop, keys))]
     usuario.save()
     return redirect(url_for('HomeUser'))
@@ -146,9 +146,11 @@ def HomeUser(form, /):
 def UserProfile(form, /):
     pass
 
+
 if __name__ == '__main__':
     app.config.update(
         SECRET_KEY = urandom(32),
         DEBUG = True,
-        TESTING = True)
+        TESTING = True
+        )
     app.run()
