@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
-from db import database, Usuarios, ImageField
-from validate_email import validate_email
+from db import database, Usuarios, Publicaciones, Titulo_Profesional
 from functools import partial, update_wrapper
+from validate_email import validate_email
 from peewee import IntegrityError
 from smtplib import SMTP_SSL
 from orjson import loads
@@ -27,18 +27,17 @@ def close(exc, /):
     if not database.is_closed():
         database.close()
 
-def post(obj=None, /, text=''):
+def post(obj=None, /, text='', forward="HomeUser"):
     if obj:
         name = obj.__name__
         filename = name + '.html'
         def function(text=text, /):
             if request.method == 'POST':
-                text = obj(request.form)
-                if not isinstance(text, str):
-                    return text
+                if not (text := obj(request.form)):
+                    return redirect(url_for(forward or app.forward))
             return render_template(filename, text=text)
         return app.route('/' + name)(update_wrapper(function, obj))
-    return partial(post, text=text)
+    return partial(post, text=text, forward=forward)
 
 @app.route('/')
 def main():
@@ -47,16 +46,11 @@ def main():
 @post(text='Login')
 def Login(form, /):
     try:
-        app.current_user = Usuarios.get(
-            Usuarios.usuario == form.get('usuario'),
-            Usuarios.clave == form.get('clave')
-        )
+        app.current_user = Usuarios.get(**form)
     except Usuarios.DoesNotExist:
         return 'Incorrect user or password'
-    else:
-        return redirect(url_for('HomeUser'))
 
-@post(text = 'Register a new account')
+@post(text = 'Register a new account', forward = 'email')
 def Register(form, /):
     app.current_user = usuario = Usuarios(**form)
     if not validate_email(usuario.email):
@@ -66,7 +60,7 @@ def Register(form, /):
     except IntegrityError:
         return 'This Username already exists'
     else:
-        return redirect(url_for('email', name = 'HomeUser'))
+        app.forward = 'HomeUser'
 
 @app.route('/email/<name>')
 def email(name:str):
@@ -76,24 +70,21 @@ def email(name:str):
     with SMTP_SSL('smtp.gmail.com') as srv:
         srv.login(config['gmail'], config['key'])
         srv.sendmail(config['gmail'], email, msg)
-    return redirect(url_for('Code', name = name))
+    return redirect(url_for('Code'))
 
-@post
+@post(forward = None)
 def Code(form, /):
-    if form['code'] == app.code:
-        return redirect(url_for(request.args.get('name')))
-    return 'Invalid Verification Code'
+    if form['code'] != app.code:
+        return 'Invalid Verification Code'
 
-@post
+@post(forward='email')
 def Forgot_Password(form, /):
     try:
-        app.current_user = Usuarios.get(
-            Usuarios.usuario == form['usuario'],
-            Usuarios.email == form['email'])
+        app.current_user = Usuarios.get(**form)
     except Usuarios.DoesNotExist:
         return 'Invalid Username or Email'
     else:
-        return redirect(url_for('email', name = 'Password'))
+        app.forward = 'Password'
 
 @post
 def Password(form, /):
@@ -104,12 +95,11 @@ def Password(form, /):
     usuario = app.current_user
     usuario.clave = key
     usuario.save()
-    return redirect(url_for('HomeUser'))
 
 @app.route('/close')
 def close():
     del app.current_user
-    return redirect(url_for('Login'))
+    return redirect(url_for('Home'))
 
 @post
 def Home(form, /):
@@ -122,35 +112,39 @@ def user_page(obj):
         if not (usuario := getattr(app, 'current_user', None)):
             return redirect(url_for('Login'))
         if request.method == 'POST':
-            return obj(request.form)
-        return render_template(filename, **usuario.__data__)
+            obj(request.form, usuario)
+            return redirect(url_for("HomeUser"))
+        return render_template(filename, usuario = usuario)
     return app.route('/' + name)(update_wrapper(function, obj))
 
 @user_page
-def Edit(form, /):
-    usuario = app.current_user
+def Edit(form, usuario, /):
     data = usuario.__data__
-    data['habilidades'] = dict.pop(form, 'habilidades')
+    data['habilidades'] = dict.pop(form, 'habilidades', ())
+    if (t := dict.pop(form, 'titulo_profesional')[0]).isdigit():
+        usuario.titulo_profesional = Titulo_Profesional.get(id_titulo=int(t))
     data|={k:(v if k.endswith('_') else v[0]) for k, v in dict.items(form)}
-    if file := request.files.get('foto'):
-        data['foto'] = ImageField.python_value(file.read())
+    if foto := request.files.get('foto'):
+        data['foto'] = foto.read()
+        del usuario.base64
     for field, keys in usuario.jsons.items():
         data[field] = [*zip(*map(data.pop, keys))]
     usuario.save()
-    return redirect(url_for('HomeUser'))
 
 @user_page
-def HomeUser(form, /):
-    pass
+def HomeUser(form, usuario, /):
+    if imagen := request.files.get('imagen'):
+        dict.update(form, imagen=imagen.read())
+    Publicaciones(**form, id_usuario=usuario.id_usuario).save()
 
 @user_page
-def UserProfile(form, /):
+def UserProfile(form, usuario, /):
     pass
-
 
 if __name__ == '__main__':
     app.config.update(
         SECRET_KEY = urandom(32),
         DEBUG = True,
-        TESTING = True)
+        TESTING = True
+        )
     app.run()

@@ -2,6 +2,7 @@
 {% block title %}User Profile{% endblock %}
 
 {% block iniciarSesion %}
+
 <div class="ml-auto">
     <li class="nav-item d-none d-sm-inline-block">
         <a href="/HomeUser" class="nav-link btn btn-block btn-outline-secondary btn-small">
@@ -10,13 +11,13 @@
         </a>
     </li>
     <li class="nav-item d-none d-sm-inline-block">
-        <a href="/Home" class="nav-link">Cerrar sesión</a>
+        <a href="/close" class="nav-link">Cerrar sesión</a>
     </li>
 </div>
+
 {% endblock %}
 
 {% block content %}
-
 
 <div class="container" style="margin-bottom: 50px;">
     <div class="row">
@@ -67,7 +68,7 @@
                                         <div class="photo-container"
                                             style="width: 100%; height: 320px; border: 2px solid; margin-bottom: 10px; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative;">
                                             <img id="previewImage" width="250px" height="300px" alt="Preview"
-                                            src="data:;base64,{{foto}}"
+                                            src="data:;base64,{{usuario.base64}}"
                                                 style="object-fit: contain;">
                                         </div>
                                         <input type="file" id="inputFile" class="d-none" name="foto">
@@ -228,7 +229,7 @@
                                                 <div class="photo-container"
                                                     style="width: 100%; height: 320px; border: 2px solid; margin-bottom: 10px; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative;">
                                                     <img id="previewImage" width="250px" height="300px" alt="Preview"
-                                                    src="data:;base64,{{foto}}"
+                                                    src="data:;base64,{{usuario.base64}}"
                                                          style="object-fit: contain;">
                                                 </div>
                                                 <!-- <input type="file" id="inputFile" class="d-none">
@@ -244,6 +245,7 @@
                                             <div class="col-lg-12">
                                                 <label for="nombreCompleto">Full Name:</label>
                                                 <input type="text" class="form-control" id="nombreCompleto"
+                                                value="{{usuario.nombre}}" 
                                                     name="nombreCompleto" placeholder="Full Name" disabled>
                                             </div>
                                         </div>
@@ -253,14 +255,9 @@
                                                     position:</label>
                                                 <select class="form-control" id="tituloProfesional"
                                                     name="tituloProfesional" disabled>
-                                                    <option value="">Select</option>
-                                                    <option value="estudios incompletos">No studies or incomplete school
-                                                        studies</option>
-                                                    <option value="Bachillerato">High School</option>
-                                                    <option value="Licenciatura">Degree</option>
-                                                    <option value="Maestría">Master's degree</option>
-                                                    <option value="Doctorado">Doctorate</option>
-                                                    <!-- Agrega más opciones según necesites -->
+                                                        <option selected="selected">
+                                                          {{usuario.titulo_profesional.nombre}}
+                                                        </option>
                                                 </select>
                                             </div>
                                         </div>
@@ -268,7 +265,9 @@
                                             <div class="col-lg-12">
                                                 <label for="ubicacion">Location:</label>
                                                 <input type="text" class="form-control" id="ubicacion" name="ubicacion"
-                                                    placeholder="Place your location" disabled>
+                                                    placeholder="Place your location" 
+                                                value="{{usuario.localizacion}}" 
+                                                disabled>
                                             </div>
                                         </div>
                                     </div>
@@ -286,7 +285,8 @@
                                                 <label for="resumen">Brief summary: (Optional)</label>
                                                 <textarea class="form-control" id="resumen" name="resumen" rows="4"
                                                     placeholder="Highlight your skills, experience and key achievements"
-                                                    disabled></textarea>
+                                                    disabled>{{usuario.resumen}}
+                                                </textarea>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
@@ -295,7 +295,9 @@
                                                     <textarea class="form-control" id="objetivo" name="objetivo"
                                                         rows="4"
                                                         placeholder="Enter your career goal or purpose statement"
-                                                        disabled></textarea>
+                                                        disabled>
+                                                            {{usuario.objetivo}}
+                                                        </textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -311,29 +313,52 @@
                                         <h3 class="card-title">Experience</h3>
                                     </div>
                                     <div class="card-body">
+                                        {% for xp in usuario.experiencia %}
                                         <div class="row">
-                                            <div class="col-lg-6">
-                                                <label for="nombreEmpresa${contadorEmpleos}">Company Name:</label>
-                                                <input type="text" class="form-control" id="nombreEmpresa"
-                                                    name="nombreEmpresaç" placeholder="Nombre de la empresa" disabled>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <label for="periodoTrabajo">Working period</label>
-                                                <input type="text" class="form-control" id="periodoTrabajo"
-                                                    name="periodoTrabajo" placeholder="(MM/AAAA - MM/AAAA)" disabled>
-                                            </div>
+                                          <div class="col-lg-6">
+                                            <label for="nombreEmpresa_">Company Name:</label>
+                                            <input type="text" class="form-control" id="nombreEmpresa_" name="nombreEmpresa_" value="{{xp[0]}}"
+                                              placeholder="Nombre de la empresa">
+                                          </div>
+                                          <div class="col-lg-6">
+                                            <label for="periodoTrabajo_">Working period</label>
+                                            <input type="text" class="form-control" id="periodoTrabajo_" name="periodoTrabajo_" value="{{xp[1]}}"
+                                              placeholder="¡(MM/AAAA - MM/AAAA)">
+                                          </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-12">
-                                                <label for="responsabilidades${contadorEmpleos}">Description of
-                                                    responsibilities and
-                                                    achievements:</label>
-                                                <textarea class="form-control" id="responsabilidades"
-                                                    name="responsabilidades" rows="4"
-                                                    placeholder="Describa sus responsabilidades y logros en este empleo"
-                                                    disabled></textarea>
-                                            </div>
+                                          <div class="col-lg-12">
+                                            <label for="responsabilidades_">Description of responsibilities and achievements:</label>
+                                            <textarea class="form-control" id="responsabilidades_" name="responsabilidades_" rows="4"
+                                              placeholder="Describe your responsabilities and achievements on this work">{{xp[2]}}</textarea>
+                                          </div>
                                         </div>
+
+                                        {% else %}
+
+                                        <div class="row">
+                                          <div class="col-lg-6">
+                                            <label for="nombreEmpresa_">Company Name:</label>
+                                            <input type="text" class="form-control" id="nombreEmpresa_" name="nombreEmpresa_"
+                                              placeholder="Nombre de la empresa">
+                                          </div>
+                                          <div class="col-lg-6">
+                                            <label for="periodoTrabajo_">Working period</label>
+                                            <input type="text" class="form-control" id="periodoTrabajo_" name="periodoTrabajo_"
+                                              placeholder="¡(MM/AAAA - MM/AAAA)">
+                                          </div>
+                                        </div>
+                                        <div class="row">
+                                          <div class="col-lg-12">
+                                            <label for="responsabilidades_">Description of responsibilities and
+                                              achievements:</label>
+                                            <textarea class="form-control" id="responsabilidades_" name="responsabilidades_" rows="4"
+                                              placeholder="Describe your responsabilities and achievements on this work"></textarea>
+                                          </div>
+                                        </div>
+
+                                        {% endfor %}
+
                                     </div>
                                 </div>
                             </div>
@@ -344,27 +369,50 @@
                                         <h3 class="card-title">Education</h3>
                                     </div>
                                     <div class="card-body">
+                                        {% for edu in usuario.educacion %}
                                         <div class="row">
-                                            <div class="col-lg-6">
-                                                <label for="institucion">Educational institution:</label>
-                                                <input type="text" class="form-control" id="institucion"
-                                                    name="institucion" placeholder="Name of The Educational institution"
-                                                    disabled>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <label for="titulo">Obtained title:</label>
-                                                <input type="text" class="form-control" id="titulo" name="titulo"
-                                                    placeholder="Obtained title" disabled>
-                                            </div>
+                                          <div class="col-lg-6">
+                                            <label for="institucion_">Educational institution:</label>
+                                            <input type="text" class="form-control" id="institucion_" name="institucion_" value="{{edu[0]}}"
+                                              placeholder="Name of The Educational institution">
+                                          </div>
+                                          <div class="col-lg-6">
+                                            <label for="titulo_">Obtained title:</label>
+                                            <input type="text" class="form-control" id="titulo_" name="titulo_" placeholder="Obtained title"
+                                              value="{{edu[1]}}">
+                                          </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-6">
-                                                <label for="periodoEstudio">Working period:</label>
-                                                <input type="text" class="form-control" id="periodoEstudio"
-                                                    name="periodoEstudio" placeholder="(MM/AAAA - MM/AAAA)" disabled>
-                                            </div>
-                                            <div class="col-lg-6"></div>
+                                          <div class="col-lg-6">
+                                            <label for="periodoEstudio_">Working period:</label>
+                                            <input type="text" class="form-control" id="periodoEstudio_" name="periodoEstudio_" value="{{edu[2]}}"
+                                              placeholder="(MM/AAAA - MM/AAAA)">
+                                          </div>
+                                          <div class="col-lg-6"></div>
                                         </div>
+
+                                        {% else %}
+
+                                        <div class="row">
+                                          <div class="col-lg-6">
+                                            <label for="institucion_">Educational institution:</label>
+                                            <input type="text" class="form-control" id="institucion_" name="institucion_"
+                                              placeholder="Name of The Educational institution">
+                                          </div>
+                                          <div class="col-lg-6">
+                                            <label for="titulo_">Obtained title:</label>
+                                            <input type="text" class="form-control" id="titulo_" name="titulo_" placeholder="Obtained title">
+                                          </div>
+                                        </div>
+                                        <div class="row">
+                                          <div class="col-lg-6">
+                                            <label for="periodoEstudio_">Working period:</label>
+                                            <input type="text" class="form-control" id="periodoEstudio_" name="periodoEstudio_"
+                                              placeholder="(MM/AAAA - MM/AAAA)">
+                                          </div>
+                                          <div class="col-lg-6"></div>
+                                        </div>
+                                        {% endfor %}
                                     </div>
                                 </div>
                             </div>
@@ -385,7 +433,12 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody id="tablaHabilidades">
-
+                                                    {% for hab in usuario.habilidades %}
+                                                        <tr>
+                                                        <td>{{loop.index0 + 1}}</td>
+                                                        <td>{{hab}}</td>
+                                                        </tr>
+                                                    {% endfor %}
                                                     </tbody>
                                                 </table>
                                             </div>

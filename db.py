@@ -1,25 +1,17 @@
 from peewee import *
 from datetime import datetime
-from base64 import b64encode, b64decode
+from functools import cached_property
+from base64 import b64encode
 from orjson import loads, dumps
 
 database = SqliteDatabase('webapp_db.db')
-
+database.foreign_keys = True
 DEFAULT_LIST = []
-
 
 class JsonField(BlobField):
     db_value = dumps
+
     python_value = loads
-
-
-class ImageField(BlobField):
-    db_value = staticmethod(b64decode)
-    @staticmethod
-    def python_value(value:bytes) -> str:
-        if value:
-            value = b64encode(value)
-        return value.decode('utf-8')
 
 
 class BaseModel(Model):
@@ -27,12 +19,18 @@ class BaseModel(Model):
         database = database
 
 
+class Titulo_Profesional(BaseModel):
+    id_titulo = AutoField(column_name='titulo_id', null=True)
+
+    nombre = CharField(column_name='nombre')
+        
+
 class Usuarios(BaseModel):
     id_usuario = AutoField(column_name='IDUsuario', null=True)
 
     usuario = CharField(column_name='Usuario', unique=True)
 
-    foto = ImageField(column_name='Foto', default=b'')
+    foto = BlobField(column_name='Foto', default=b'')
     
     clave = CharField(column_name='Clave')
     
@@ -42,7 +40,8 @@ class Usuarios(BaseModel):
     
     telefono = CharField(12, column_name='Telefono', default='')
     
-    titulo_profesional = CharField(column_name='Titulo_Profesional', default='')
+    titulo_profesional = ForeignKeyField(column_name='Titulo_Profesional',
+        field='id_titulo', model=Titulo_Profesional, default=1)
 
     educacion = JsonField(column_name='Educacion', default=DEFAULT_LIST)
 
@@ -56,9 +55,13 @@ class Usuarios(BaseModel):
 
     localizacion = CharField(column_name='Localizacion', default='')
 
-    jsons = {
-    'experiencia':('nombreEmpresa_','periodoTrabajo_','responsabilidades_'),
-    'educacion':("institucion_",'titulo_','periodoEstudio_')}
+    jsons = {'educacion':("institucion_",'titulo_','periodoEstudio_'),
+    'experiencia':('nombreEmpresa_','periodoTrabajo_','responsabilidades_')}
+
+    @cached_property
+    def base64(self, /) -> str:
+        value = b64encode(self.foto).decode()
+        return value
 
 
 class Modalidad(BaseModel):
@@ -75,18 +78,20 @@ class Publicaciones(BaseModel):
     
     titulo = CharField(column_name='Titulo')
     
-    descripcion = CharField(column_name='Descripcion', null=True)
+    contenido = CharField(column_name='Contenido', default='')
     
-    imagen = CharField(column_name='Imagen', null=True)
+    imagen = BlobField(column_name='Imagen', default=b'')
     
     localizacion = CharField(column_name='Localizacion', null=True)
     
     modalidad = ForeignKeyField(column_name='Modalidad', field='id_modalidad',
         model=Modalidad)
     
-    area = CharField(column_name='Area', null=True)
+    area = CharField(column_name='Area', default='')
     
     fecha = DateTimeField(column_name='Fecha', default=datetime.now)
+
+    base64 = property(Usuarios.base64.func)
 
     class Meta:
         database = database
@@ -147,6 +152,5 @@ class Solicitudes(BaseModel):
     calificacion = IntegerField(column_name='Calificacion', null=True)
 
 database.create_tables((Usuarios,Modalidad,Publicaciones,Comentario,Estatus,
-    EtiquetaReaccion,Reacciones,Solicitudes))
-
-del dumps, loads, datetime, b64decode
+    EtiquetaReaccion,Reacciones,Solicitudes,Titulo_Profesional))
+del dumps, loads, datetime
