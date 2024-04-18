@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}User Home{% endblock %}
+
+{% block busqueda %}
+
+<!-- Barra de menú -->
+<li class="nav-item">
+    <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+        <i class="fas fa-search"></i>
+        Buscar usuarios
+    </a>
+    <div class="navbar-search-block">
+        <form class="form-inline">
+            <div class="input-group input-group-sm">
+                <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+                <div class="input-group-append">
+                    <button class="btn btn-navbar" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <button class="btn btn-navbar" type="button" data-widget="navbar-search">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</li>
+<!-- Fin Barra de menú -->
+
+{% endblock %}
+
+
+{% block iniciarSesion %}
+
+<div class="ml-auto">
+    <li class="nav-item d-none d-sm-inline-block">
+        <a href="/UserProfile" class="nav-link btn btn-block btn-outline-secondary btn-small">
+            <i class="fas fa-user"></i>
+            Mi perfil
+        </a>
+    </li>
+    <li class="nav-item d-none d-sm-inline-block">
+        <a href="/close" class="nav-link">Cerrar sesión</a>
+    </li>
+</div>
+
+{% endblock %}
+<div class="card-header">
+    <div class="user-block">
+        <img class="img-circle" src="data:;base64,{{usuario.base64}}" alt="User Image">
+        <span class="username"><a href="#">{{usuario.usuario}}</a></span>
+        <span class="description">{{publicacion.titulo}} - {{publicacion.fecha}}</span>
+    </div>
+        <!-- /.user-block -->
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" title="Mark as read">
+                <i class="far fa-circle"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <!-- /.card-tools -->
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <span>Modalidad: </span>
+        <!-- post text -->
+        <p>{{publicacion.modalidad.nombre}}</p>
+        <p>{{publicacion.contenido}}</p>
+        
+        <!-- Attachment -->
+        {% if publicacion.imagen %}
+        <div class="attachment-block clearfix">
+            <img src="data:;base64,{{publicacion.base64}}">
+<!-- 
+                <div class="attachment-pushed">
+                    <h4 class="attachment-heading"><a href="https://www.lipsum.com/">Lorem ipsum
+                            text
+                            generator</a></h4>
+
+                    <div class="attachment-text">
+                        Description about the attachment can be placed here.
+                        Lorem Ipsum is simply dummy text of the printing and typesetting
+                        industry... <a href="#">more</a>
+                    </div>
+                    
+                </div> -->
+                <!-- /.attachment-pushed -->
+            </div>
+            <!-- /.attachment-block -->
+            {% endif %}
+            {% endfor %}
+            <!-- Social sharing buttons -->
+            <button type="button" class="btn btn-default btn-sm"><i class="fas fa-share">Share</i></button>
+            <button type="button" class="btn btn-default btn-sm"><i
+                    class="far fa-thumbs-up"></i> Like</button>
+            <span class="float-right text-muted">{{publicacion.likes}} likes - # comments</span>
+        </div> 
+        <!-- /.card-body -->
+        
+<div class="card-footer card-comments">
+    {% for comentario in publicacion.comentarios}
+    <div class="card-comment">
+        <!-- User image -->
+        <img class="img-circle img-sm" src="{{comentario.id_usuario.base64}}"
+            alt="User Image">
+        <div class="comment-text">
+            <span class="username">
+                {{comentario.id_usuario.usuario}}
+                <span class="text-muted float-right">{{comentario.fecha}}</span>
+            </span><!-- /.username -->
+            {{comentario.comentario}}
+        </div>
+        <!-- /.comment-text -->
+    </div>
+    {% endfor %}
+    <div class="card-footer">
+        <form method="post">
+            <img class="img-fluid img-circle img-sm "
+                src="data:;base64,{{usuario.base64}}"
+                alt="Alt Text">
+            <!-- .img-push is used to add margin to elements next to floating images -->
+            <div class="img-push">
+                <input type="number" name="id_publicacion" value="{{publicacion.id_publicacion}}" hidden>
+                <input type="number" name="id_usuario" value="{{usuario.id_usuario}}" hidden>
+                <input type="text" class="form-control form-control-sm" id="comentario"
+                name="comentario"
+                    placeholder="Press enter to post comment">
+            </div>
+        </form>
+    </div>
+    <!-- /.card-comment -->
+</div>

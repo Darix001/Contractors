@@ -5,7 +5,9 @@ from base64 import b64encode
 from orjson import loads, dumps
 
 database = SqliteDatabase('webapp_db.db')
+
 database.foreign_keys = True
+
 DEFAULT_LIST = []
 
 
@@ -23,7 +25,7 @@ class BaseModel(Model):
 class Titulo_Profesional(BaseModel):
     id_titulo = AutoField(column_name='titulo_id', null=True)
 
-    nombre = CharField(column_name='nombre')
+    nombre = CharField(column_name='nombre', unique=True)
         
 
 class Usuarios(BaseModel):
@@ -61,19 +63,17 @@ class Usuarios(BaseModel):
 
     @cached_property
     def base64(self, /) -> str:
-        value = b64encode(self.foto).decode()
-        return value
+        return b64encode(self.foto).decode()
 
-    @property
-    def Publicaciones(self, /):
-        return Publicaciones.select().join(Usuarios
-            ).where(Publicaciones.id_usuario==self.id_usuario).iterator()
+    def publicaciones(self, /):
+        return Publicaciones.select().join(Usuarios).join(Modalidad
+           ) .where(Publicaciones.id_usuario==self.id_usuario).iterator()
 
 
 class Modalidad(BaseModel):
     id_modalidad = AutoField(column_name='IdModalidad', null=True)
     
-    nombre = CharField(column_name='Nombre', null=True)
+    nombre = CharField(column_name='Nombre', unique=True)
 
 
 class Publicaciones(BaseModel):
@@ -106,35 +106,44 @@ class Publicaciones(BaseModel):
         return Comentario.select().join(Publicaciones).where(
             Comentario.id_publicacion==self.id_publicacion).iterator()
 
+    @classmethod
+    def latest(cls, usuario, /):
+        return Publicaciones.select(Publicaciones, Usuarios
+            ).join(Usuarios).order_by(cls.fecha).iterator()
+
     class Meta:
         database = database
         indexes = ((('id_usuario', 'Fecha'), False),)
 
 
 class Comentario(BaseModel):
-    id_comentario = AutoField(column_name='IdComentario', null=True)
+    id_comentario = AutoField(column_name='IdComentario')
     
     id_publicacion = ForeignKeyField(column_name='IdPublicacion',
-        field='id_publicacion', model=Publicaciones, null=True)
+        field='id_publicacion', model=Publicaciones)
     
     id_usuario = ForeignKeyField(column_name='IdUsuario',
-        field='id_usuario', model=Usuarios, null=True)
+        field='id_usuario', model=Usuarios)
     
-    comentario = CharField(column_name='Comentario', null=True)
+    comentario = CharField(column_name='Comentario')
 
     fecha = DateTimeField(column_name='Fecha', default=datetime.now)
 
+    class Meta:
+        database = database
+        indexes = ((('IdPublicacion', 'IdUsuario'), False),)
+
 
 class Estatus(BaseModel):
-    id_estatus = AutoField(column_name='IdEstatus', null=True)
+    id_estatus = AutoField(column_name='IdEstatus')
     
-    nombre = CharField(column_name='Nombre', null=True)
+    nombre = CharField(column_name='Nombre', unique=True)
 
 
 class EtiquetaReaccion(BaseModel):
     id_etiqueta = AutoField(column_name='IdEtiqueta', null=True)
     
-    nombre = CharField(column_name='Nombre', null=True)
+    nombre = CharField(column_name='Nombre', unique=True)
 
 
 class Reacciones(BaseModel):
@@ -171,3 +180,11 @@ database.create_tables((Usuarios,Modalidad,Publicaciones,Comentario,Estatus,
     EtiquetaReaccion,Reacciones,Solicitudes,Titulo_Profesional))
 
 del dumps, loads, datetime
+# Titulo_Profesional.insert_many(
+# [('No studies or incomplete school studies','High School',
+# 'Degree',"Master's degree",'technologist')],
+# fields = (Titulo_Profesional.nombre,)
+# ).execute()
+
+# Modalidad.insert_many([('Select','intern','in person','remote','mixed')],
+#     fields=(Modalidad.nombre,)).execute()

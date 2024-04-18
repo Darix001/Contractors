@@ -108,7 +108,7 @@
                                         <img class="img-circle"
                                             src="data:;base64,{{usuario.base64}}"
                                             alt="User Image">
-                                        <span class="username"><a href="#">{{usuario.usuario}}</a></span>
+                                        <span class="username"><a href="#">{{usuario.usuario}}</a></span>x
                                         <span class="description">{{publicacion.titulo}} - {{publicacion.fecha}}</span>
                                     </div>
                                     <!-- /.user-block -->
@@ -127,8 +127,9 @@
                                 </div>
                                 <!-- /.card-header -->
                                 <div class="card-body">
+                                    <span>Modalidad: </span>
                                     <!-- post text -->
-
+                                    <p>{{publicacion.modalidad.nombre}}</p>
                                     <p>{{publicacion.contenido}}</p>
                                     
                                     <!-- Attachment -->
@@ -152,61 +153,27 @@
                                     </div>
                                     <!-- /.attachment-block -->
                                     {% endif %}
-                                    {% endfor %}
                                     <!-- Social sharing buttons -->
-                                    d<button type="button" class="btn btn-default btn-sm"><i class="fas fa-share"></i>
+                                    <button type="button" class="btn btn-default btn-sm"><i class="fas fa-share"></i>
                                         Share</button>
                                     <button type="button" class="btn btn-default btn-sm"><i
                                             class="far fa-thumbs-up"></i> Like</button>
-                                    <span class="float-right text-muted">{{publicacion.likes}} likes - 2 comments</span>
-                                </div>
+                                    <span class="float-right text-muted">
+                                        <a href="Comentarios/id={{publicacion}}"></a>
+                                    {{publicacion.likes}} likes - # comments</span>
+                                </div> 
+                                {% endfor %}
                                 <!-- /.card-body -->
-                                <div class="card-footer card-comments">
-                                    <div class="card-comment">
-                                        <!-- User image -->
-                                        <img class="img-circle img-sm"
-                                            src="https://img.freepik.com/foto-gratis/retrato-hermoso-mujer-joven-posicion-pared-gris_231208-10760.jpg?size=626&ext=jpg&ga=GA1.1.1319243779.1712188800&semt=sph"
-                                            alt="User Image">
-
-                                        <div class="comment-text">
-                                            <span class="username">
-                                                Maria Gonzales
-                                                <span class="text-muted float-right">8:03 PM Today</span>
-                                            </span><!-- /.username -->
-                                            It is a long established fact that a reader will be distracted
-                                            by the readable content of a page when looking at its layout.
-                                        </div>
-                                        <!-- /.comment-text -->
-                                    </div>
-                                    <!-- /.card-comment -->
-                                    {% for comentario in publicacion.comentarios}
-                                    <div class="card-comment">
-                                        <!-- User image -->
-                                        <img class="img-circle img-sm"
-                                            src="{{comentario.id_usuario.base64}}"
-                                            alt="User Image">
-
-                                        <div class="comment-text">
-                                            <span class="username">
-                                                {{comentario.username}}
-                                                <span class="text-muted float-right">{{comentario.fecha}}</span>
-                                            </span><!-- /.username -->
-                                            {{comentario.comentario}}
-                                        </div>
-                                        <!-- /.comment-text -->
-                                    </div>
-                                    <!-- /.card-comment -->
-                                </div>
+                                
                                 <!-- /.card-footer -->
                                 <div class="card-footer">
                                     <form method="post">
-                                        <img class="img-fluid img-circle img-sm"
+                                        <img class="img-fluid img-circle img-sm "
                                             src="data:;base64,{{usuario.base64}}"
                                             alt="Alt Text">
                                         <!-- .img-push is used to add margin to elements next to floating images -->
                                         <div class="img-push">
-                                            <input type="number" name="id_publicacion" value="{{publicacion.id_publicacion}}" hidden>
-                                            <input type="number" name="id_usuario" value="{{usuario.id_usuario}}" hidden>
+                                            <input type="number" name="id_publicacion" value="{{publicacion}}" hidden>
                                             <input type="text" class="form-control form-control-sm" id="comentario"
                                             name="comentario"
                                                 placeholder="Press enter to post comment">

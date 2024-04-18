@@ -11,6 +11,8 @@ app = Flask(__name__)
 
 app.route = partial(app.route, methods=('POST', 'GET'))
 
+session = vars(app)
+
 with open('config.json', 'rb') as config:
     config = loads(config.read())
 
@@ -34,7 +36,7 @@ def post(obj=None, /, text='', forward="HomeUser"):
         def function(text=text, /):
             if request.method == 'POST':
                 if not (text := obj(request.form)):
-                    return redirect(url_for(forward or app.forward))
+                    return redirect(url_for(forward or session.pop('forward')))
             return render_template(filename, text=text)
         return app.route('/' + name)(update_wrapper(function, obj))
     return partial(post, text=text, forward=forward)
@@ -62,8 +64,8 @@ def Register(form, /):
     else:
         app.forward = 'HomeUser'
 
-@app.route('/email/<name>')
-def email(name:str):
+@app.route('/email')
+def email():
     app.code = code = f'{getcode()}'
     email = app.current_user.email
     msg = config['msg'].format_map(locals())
@@ -98,24 +100,28 @@ def Password(form, /):
 
 @app.route('/close')
 def close():
-    del app.current_user
+    del session.pop('current_user', None)
     return redirect(url_for('Home'))
 
 @post
 def Home(form, /):
     pass
 
-def user_page(obj):
-    name = obj.__name__
-    filename = name + '.html'
-    def function():
-        if not (usuario := getattr(app, 'current_user', None)):
-            return redirect(url_for('Login'))
-        if request.method == 'POST':
-            obj(request.form, usuario)
-            return redirect(url_for("HomeUser"))
-        return render_template(filename, usuario = usuario)
-    return app.route('/' + name)(update_wrapper(function, obj))
+def user_page(obj=None, /, query=None):
+    if obj:
+        name = obj.__name__
+        filename = name + '.html'
+        def function(rows=None):
+            if not (usuario := session.get('current_user')):
+                return redirect(url_for('Login'))
+            if request.method == 'POST':
+                obj(request.form, usuario)
+                return redirect(url_for("HomeUser"))
+            if query:
+                rows = query(usuario)
+            return render_template(filename, usuario=usuario, query=rows)
+        return app.route('/' + name)(update_wrapper(function, obj))
+    return partial(user_page, query=query)
 
 @user_page
 def Edit(form, usuario, /):
@@ -131,21 +137,19 @@ def Edit(form, usuario, /):
         data[field] = [*zip(*map(data.pop, keys))]
     usuario.save()
 
-@user_page
+@user_page(query=Publicaciones.latest)
 def HomeUser(form, usuario,/):
     save_publication_or_comment(form, usuario)
 
-@user_page
+@user_page(query=Usuarios.publicaciones)
 def UserProfile(form, usuario,/):
     save_publication_or_comment(form, usuario)
 
-def save_publication_or_comment(form, usuario,/):
-    if 'comentario' in form:
-        return Comentario(**form).save()
+def save_publication_or_comment(form, usuario, /):
+    table = Comentario if 'comentario' in form else Publicaciones
     if imagen := request.files.get('imagen'):
-        dict.update(form, imagen=imagen.read())
-    Publicaciones(**form, id_usuario=usuario.id_usuario).save()
-
+        form['imagen'] = imagen.read()
+    table(**form, id_usuario=usuario).save()
 
 if __name__ == '__main__':
     app.config.update(
@@ -153,4 +157,4 @@ if __name__ == '__main__':
         DEBUG = True,
         TESTING = True
         )
-    app.run(port=5555)
+    app.run()
