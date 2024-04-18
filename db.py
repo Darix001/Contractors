@@ -8,6 +8,7 @@ database = SqliteDatabase('webapp_db.db')
 database.foreign_keys = True
 DEFAULT_LIST = []
 
+
 class JsonField(BlobField):
     db_value = dumps
 
@@ -63,6 +64,11 @@ class Usuarios(BaseModel):
         value = b64encode(self.foto).decode()
         return value
 
+    @property
+    def Publicaciones(self, /):
+        return Publicaciones.select().join(Usuarios
+            ).where(Publicaciones.id_usuario==self.id_usuario).iterator()
+
 
 class Modalidad(BaseModel):
     id_modalidad = AutoField(column_name='IdModalidad', null=True)
@@ -91,7 +97,14 @@ class Publicaciones(BaseModel):
     
     fecha = DateTimeField(column_name='Fecha', default=datetime.now)
 
+    likes = IntegerField(column_name='Likes', default=0)
+
     base64 = property(Usuarios.base64.func)
+
+    @property
+    def comentarios(self, /):
+        return Comentario.select().join(Publicaciones).where(
+            Comentario.id_publicacion==self.id_publicacion).iterator()
 
     class Meta:
         database = database
@@ -108,6 +121,8 @@ class Comentario(BaseModel):
         field='id_usuario', model=Usuarios, null=True)
     
     comentario = CharField(column_name='Comentario', null=True)
+
+    fecha = DateTimeField(column_name='Fecha', default=datetime.now)
 
 
 class Estatus(BaseModel):
@@ -151,6 +166,8 @@ class Solicitudes(BaseModel):
   
     calificacion = IntegerField(column_name='Calificacion', null=True)
 
+
 database.create_tables((Usuarios,Modalidad,Publicaciones,Comentario,Estatus,
     EtiquetaReaccion,Reacciones,Solicitudes,Titulo_Profesional))
+
 del dumps, loads, datetime

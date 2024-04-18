@@ -1,11 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for
-from db import database, Usuarios, Publicaciones, Titulo_Profesional
+from db import database, Usuarios, Publicaciones, Titulo_Profesional, Comentario
 from functools import partial, update_wrapper
 from validate_email import validate_email
 from peewee import IntegrityError
+from os import urandom, environ
 from smtplib import SMTP_SSL
 from orjson import loads
-from os import urandom
 
 app = Flask(__name__)
 
@@ -72,7 +72,7 @@ def email(name:str):
         srv.sendmail(config['gmail'], email, msg)
     return redirect(url_for('Code'))
 
-@post(forward = None)
+@post(forward=None)
 def Code(form, /):
     if form['code'] != app.code:
         return 'Invalid Verification Code'
@@ -122,7 +122,7 @@ def Edit(form, usuario, /):
     data = usuario.__data__
     data['habilidades'] = dict.pop(form, 'habilidades', ())
     if (t := dict.pop(form, 'titulo_profesional')[0]).isdigit():
-        usuario.titulo_profesional = Titulo_Profesional.get(id_titulo=int(t))
+        usuario.titulo_profesional = Titulo_Profesional.get_by_id(int(t))
     data|={k:(v if k.endswith('_') else v[0]) for k, v in dict.items(form)}
     if foto := request.files.get('foto'):
         data['foto'] = foto.read()
@@ -132,14 +132,20 @@ def Edit(form, usuario, /):
     usuario.save()
 
 @user_page
-def HomeUser(form, usuario, /):
+def HomeUser(form, usuario,/):
+    save_publication_or_comment(form, usuario)
+
+@user_page
+def UserProfile(form, usuario,/):
+    save_publication_or_comment(form, usuario)
+
+def save_publication_or_comment(form, usuario,/):
+    if 'comentario' in form:
+        return Comentario(**form).save()
     if imagen := request.files.get('imagen'):
         dict.update(form, imagen=imagen.read())
     Publicaciones(**form, id_usuario=usuario.id_usuario).save()
 
-@user_page
-def UserProfile(form, usuario, /):
-    pass
 
 if __name__ == '__main__':
     app.config.update(
@@ -147,4 +153,4 @@ if __name__ == '__main__':
         DEBUG = True,
         TESTING = True
         )
-    app.run()
+    app.run(port=5555)
