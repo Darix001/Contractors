@@ -8,6 +8,7 @@ from os import urandom, environ
 from smtplib import SMTP_SSL
 from orjson import loads
 
+
 app = Flask(__name__)
 
 app.route = partial(app.route, methods=('POST', 'GET'))
@@ -108,25 +109,38 @@ def close():
 def Home(form, /):
     pass
 
+def check_logged(func):
+    def function(key=None):
+        if usuario:=session.get('current_user'):
+            return func(usuario, key) if key else func(usuario)
+        else:
+            return redirect(url_for('Login'))
+    return function
+
 def user_page(get, obj=None, /):
     if obj:
         name = obj.__name__
         filename = name + '.html'
-        def function(rows=None):
-            if not (usuario := session.get('current_user')):
-                return redirect(url_for('Login'))
+        @check_logged
+        def function(usuario,/):
+            if args:=request.args:
+                return obj(args, usuario)
             if request.method == 'POST':
-                obj(request.form, usuario)
+                if value:=obj(request.form, usuario):
+                    return values
                 return redirect(url_for("HomeUser"))
-            return render_template(filename, usuario=usuario,
-                query=get(usuario))
+            return render_template(filename,
+                usuario=usuario,
+                query=get(usuario),
+                )
         return app.route('/' + name)(update_wrapper(function, obj))
     return partial(user_page, get)
 
 @user_page(attrgetter('habilidades'))
 def Edit(form, usuario, /):
     data = usuario.__data__
-    data['habilidades'] = dict.pop(form, 'habilidades', ())
+    for key in ('habilidades','intereses'):
+        data[key] = dict.pop(form, key, ())
     if (t := dict.pop(form, 'titulo_profesional')[0]).isdigit():
         usuario.titulo_profesional = Titulo_Profesional.get_by_id(int(t))
     data|={k:(v if k.endswith('_') else v[0]) for k, v in dict.items(form)}
@@ -137,14 +151,33 @@ def Edit(form, usuario, /):
         data[field] = [*zip(*map(data.pop, keys))]
     usuario.save()
 
+def load_profile(usuario, current_user):
+    return render_template('UserProfile.html',
+        usuario = usuario,
+        query = usuario.publicaciones(),
+        readonly = usuario != current_user,
+        )
+
 @user_page(Publicaciones.latest)
-def HomeUser(form, usuario,/):
+def HomeUser(form, usuario, /):
+    if search := form.get('search'):
+        if search := Usuarios.get_or_none(usuario=search):
+            return load_profile(search, usuario)
+        else:
+            raise KeyError(form['search'])
     save_publication_or_comment(form, usuario)
+
+@check_logged
+@app.route('/user/<key>')
+def username_click(key):
+    return load_profile(Usuarios.get_by_id(int(key)))
+
 
 @user_page(Usuarios.publicaciones)
 def UserProfile(form, usuario,/):
     save_publication_or_comment(form, usuario)
 
+@check_logged
 @app.route('/publicacion/<key>')
 def Publicacion(key):
     key = Publicaciones.get_by_id(int(key))
@@ -162,7 +195,6 @@ def save_publication_or_comment(form, usuario, /):
     if imagen := request.files.get('imagen'):
         form['imagen'] = imagen.read()
     table(**form, id_usuario=usuario).save()
-
 
 
 if __name__ == '__main__':

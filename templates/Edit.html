@@ -303,10 +303,10 @@
                     </tr>
                   </thead>
                   <tbody id="tablaIntereses">
-                    {% for habilidad in query %}
+                    {% for interes in usuario.intereses %}
                       <tr>
                         <td>{{loop.index0 + 1}}</td>
-                        <td><input type="text" value="{{Interes}}" 
+                        <td><input type="text" value="{{interes}}" 
                           name="intereses" class="transparent_input"
                           id="intereses" readonly></td>
                         <td><button type="button" class="btn btn-danger btn-sm btnEliminarInteres">Delete</button></td>
@@ -476,11 +476,5 @@ function actualizarNumeracionIntereses() {
   });
 
 </script>
-<style>
-  
-  .transparent_input{
-    border-color: white;
-    border-width: 0px;
-  }
-</style>
+
 {% endblock %}

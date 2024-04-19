@@ -109,8 +109,8 @@
     {% for comentario in publicacion.comentarios %}
     <div class="card-comment">
         <!-- User image -->
-        <img class="img-circle img-sm" src="data:;base64,{{comentario.id_usuario.base64}}"
-            alt="User Image">
+        <img class="img-circle img-sm" alt="User Image"
+        src="data:;base64,{{comentario.id_usuario.base64}}">
         <div class="comment-text">
             <span class="username">
                 {{comentario.id_usuario.usuario}}

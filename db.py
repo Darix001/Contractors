@@ -58,12 +58,19 @@ class Usuarios(BaseModel):
 
     localizacion = CharField(column_name='Localizacion', default='')
 
+    intereses = JsonField(column_name='Intereses', default=DEFAULT_LIST)
+
     jsons = {'educacion':("institucion_",'titulo_','periodoEstudio_'),
     'experiencia':('nombreEmpresa_','periodoTrabajo_','responsabilidades_')}
 
+    with open('templates/default_user.png', 'rb') as image:
+        image = b64encode(image.read()).decode()
+    
     @cached_property
-    def base64(self, /) -> str:
-        return b64encode(self.foto).decode()
+    def base64(self, default=image) -> str:
+        return (b64encode(foto).decode() if (foto:=self.foto) else default)
+
+    del image
 
     def publicaciones(self, /):
         return Publicaciones.select(Publicaciones, Modalidad, Usuarios
@@ -99,6 +106,8 @@ class Publicaciones(BaseModel):
     fecha = DateTimeField(column_name='Fecha', default=datetime.now)
 
     likes = IntegerField(column_name='Likes', default=0)
+
+    categoria = CharField(column_name='Categoria', default='')
 
     base64 = property(Usuarios.base64.func)
 
