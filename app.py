@@ -157,6 +157,10 @@ def load_profile(usuario, current_user):
         query = usuario.publicaciones(),
         readonly = usuario != current_user,
         )
+    
+@app.errorhandler()
+def page_not_found(error):
+    return render_template('error.html')
 
 @user_page(Publicaciones.latest)
 def HomeUser(form, usuario, /):
