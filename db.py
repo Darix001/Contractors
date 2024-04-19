@@ -18,6 +18,14 @@ class JsonField(BlobField):
 
 
 class BaseModel(Model):
+    
+    @classmethod
+    def get_by_id(cls, key:int) -> Model:
+        try:
+            return super().get_by_id(key)
+        except cls.DoesNotExist:
+            return None
+
     class Meta:
         database = database
 

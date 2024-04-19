@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, abort
 from db import database, Usuarios, Publicaciones, Titulo_Profesional, Comentario
 from functools import partial, update_wrapper
 from validate_email import validate_email
@@ -68,8 +68,8 @@ def Register(form, /):
         usuario.save()
     except IntegrityError:
         return 'This Username already exists'
-    else:
-        app.forward = 'HomeUser'
+    app.forward = 'HomeUser'
+
 
 @app.route('/email')
 def email():
@@ -81,10 +81,12 @@ def email():
         srv.sendmail(config['gmail'], email, msg)
     return redirect(url_for('Code'))
 
+
 @post(forward=None)
 def Code(form, /):
     if form['code'] != app.code:
         return 'Invalid Verification Code'
+
 
 @post(forward='email')
 def Forgot_Password(form, /):
@@ -92,8 +94,8 @@ def Forgot_Password(form, /):
         app.current_user = Usuarios.get(**form)
     except Usuarios.DoesNotExist:
         return 'Invalid Username or Email'
-    else:
-        app.forward = 'Password'
+    app.forward = 'Password'
+
 
 @post
 def Password(form, /):
@@ -104,6 +106,7 @@ def Password(form, /):
     usuario = app.current_user
     usuario.clave = key
     usuario.save()
+
 
 @app.route('/close')
 def close():
@@ -118,10 +121,10 @@ def Home(form, /):
 def check_logged(func):
     def function(key=None):
         if usuario:=session.get('current_user'):
-            return func(usuario, key) if key else func(usuario)
+            return func(usuario, key) if key is not None else func(usuario)
         else:
             return redirect(url_for('Login'))
-    return function
+    return update_wrapper(function, func)
 
 
 def user_page(get, obj=None, /):
@@ -138,8 +141,7 @@ def user_page(get, obj=None, /):
                 return redirect(url_for("HomeUser"))
             return render_template(filename,
                 usuario=usuario,
-                query=get(usuario),
-                )
+                query=get(usuario))
         return app.route('/' + name)(update_wrapper(function, obj))
     return partial(user_page, get)
 
@@ -164,8 +166,8 @@ def load_profile(usuario, current_user):
     return render_template('UserProfile.html',
         usuario = usuario,
         query = usuario.publicaciones(),
-        readonly = usuario != current_user,
-        )
+        readonly = usuario != current_user)
+
     
 @app.errorhandler(404)
 def page_not_found(error):
@@ -182,29 +184,27 @@ def HomeUser(form, usuario, /):
     save_publication_or_comment(form, usuario)
 
 
-@check_logged
 @app.route('/user/<key>')
-def username_click(key):
-    try:
-        key = Usuarios.get_by_id(int(key))
-    except Exception as e:
-        raise e
-    return load_profile(key)
-
+@check_logged
+def username_click(usuario, key,/):
+    if key := Usuarios.get_by_id(int(key)):
+        return load_profile(key, usuario)
+    return abort(404)
 
 @user_page(Usuarios.publicaciones)
 def UserProfile(form, usuario,/):
     save_publication_or_comment(form, usuario)
 
 
-@check_logged
 @app.route('/publicacion/<key>')
-def Publicacion(key):
-    key = Publicaciones.get_by_id(int(key))
+@check_logged
+def Publicacion(usuario, key,/):
+    if key := Publicaciones.get_by_id(int(key)):
+        return abort(404)
     match request.method:
         case 'GET':
             return render_template('Publicacion.html', publicacion=key,
-                usuario=app.current_user)
+                usuario=usuario)
 
         case 'POST':
             Comentario(id_usuario=usuario, id_publicacion=key,
