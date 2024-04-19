@@ -101,14 +101,14 @@
 
 
                             <!-- Box Comment -->
-                            {% for publicacion in usuario.Publicaciones %}
+                            {% for publicacion in query %}
                             <div class="card card-widget" style="margin-top: 20px;">
                                 <div class="card-header">
                                     <div class="user-block">
                                         <img class="img-circle"
                                             src="data:;base64,{{usuario.base64}}"
                                             alt="User Image">
-                                        <span class="username"><a href="#">{{usuario.usuario}}</a></span>x
+                                        <span class="username"><a href="#">{{usuario.usuario}}</a></span>
                                         <span class="description">{{publicacion.titulo}} - {{publicacion.fecha}}</span>
                                     </div>
                                     <!-- /.user-block -->
@@ -160,7 +160,7 @@
                                             class="far fa-thumbs-up"></i> Like</button>
                                     <span class="float-right text-muted">
                                         <a href="Comentarios/id={{publicacion}}"></a>
-                                    {{publicacion.likes}} likes - # comments</span>
+                                    {{publicacion.likes}} likes - <a href="/publicacion/{{publicacion.id_usuario}}">see comments</a></span>
                                 </div> 
                                 {% endfor %}
                                 <!-- /.card-body -->

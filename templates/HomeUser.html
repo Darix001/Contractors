@@ -219,8 +219,8 @@
                         <button type="button" class="btn btn-default btn-sm"><i class="fas fa-share"></i>
                             Share</button>
                         <button type="button" class="btn btn-default btn-sm"><i
-                                class="far fa-thumbs-up"></i> Like</button>
-                        <span class="float-right text-muted">{{publicacion.likes}} likes - # comments</span>
+                            class="far fa-thumbs-up"></i> Like</button>
+                        <span class="float-right text-muted">{{publicacion.likes}} likes - <a href="/publicacion/{{publicacion.id_usuario}}">see comments</a></span>
                     </div> 
                     <!-- /.card-body -->
                     
@@ -235,6 +235,7 @@
                                 <input type="number" name="id_publicacion" value="{{publicacion.id_publicacion}}" hidden>
                                 <input type="text" class="form-control form-control-sm" id="comentario" name="comentario"
                                     placeholder="Press enter to post comment">
+                                <button type="submit" class="btn btn-dark">Comentar</button>
                             </div>
                         </form>
                     </div>

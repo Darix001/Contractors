@@ -3,6 +3,7 @@ from db import database, Usuarios, Publicaciones, Titulo_Profesional, Comentario
 from functools import partial, update_wrapper
 from validate_email import validate_email
 from peewee import IntegrityError
+from operator import attrgetter
 from os import urandom, environ
 from smtplib import SMTP_SSL
 from orjson import loads
@@ -100,14 +101,14 @@ def Password(form, /):
 
 @app.route('/close')
 def close():
-    del session.pop('current_user', None)
+    session.pop('current_user', None)
     return redirect(url_for('Home'))
 
 @post
 def Home(form, /):
     pass
 
-def user_page(obj=None, /, query=None):
+def user_page(get, obj=None, /):
     if obj:
         name = obj.__name__
         filename = name + '.html'
@@ -117,13 +118,12 @@ def user_page(obj=None, /, query=None):
             if request.method == 'POST':
                 obj(request.form, usuario)
                 return redirect(url_for("HomeUser"))
-            if query:
-                rows = query(usuario)
-            return render_template(filename, usuario=usuario, query=rows)
+            return render_template(filename, usuario=usuario,
+                query=get(usuario))
         return app.route('/' + name)(update_wrapper(function, obj))
-    return partial(user_page, query=query)
+    return partial(user_page, get)
 
-@user_page
+@user_page(attrgetter('habilidades'))
 def Edit(form, usuario, /):
     data = usuario.__data__
     data['habilidades'] = dict.pop(form, 'habilidades', ())
@@ -137,19 +137,33 @@ def Edit(form, usuario, /):
         data[field] = [*zip(*map(data.pop, keys))]
     usuario.save()
 
-@user_page(query=Publicaciones.latest)
+@user_page(Publicaciones.latest)
 def HomeUser(form, usuario,/):
     save_publication_or_comment(form, usuario)
 
-@user_page(query=Usuarios.publicaciones)
+@user_page(Usuarios.publicaciones)
 def UserProfile(form, usuario,/):
     save_publication_or_comment(form, usuario)
+
+@app.route('/publicacion/<key>')
+def Publicacion(key):
+    key = Publicaciones.get_by_id(int(key))
+    match request.method:
+        case 'GET':
+            return render_template('Publicacion.html', publicacion=key,
+                usuario=app.current_user)
+
+        case 'POST':
+            Comentario(id_usuario=usuario, id_publicacion=key,
+                comentario=form['comentario']).save()
 
 def save_publication_or_comment(form, usuario, /):
     table = Comentario if 'comentario' in form else Publicaciones
     if imagen := request.files.get('imagen'):
         form['imagen'] = imagen.read()
     table(**form, id_usuario=usuario).save()
+
+
 
 if __name__ == '__main__':
     app.config.update(

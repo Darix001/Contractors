@@ -66,8 +66,9 @@ class Usuarios(BaseModel):
         return b64encode(self.foto).decode()
 
     def publicaciones(self, /):
-        return Publicaciones.select().join(Usuarios).join(Modalidad
-           ) .where(Publicaciones.id_usuario==self.id_usuario).iterator()
+        return Publicaciones.select(Publicaciones, Modalidad, Usuarios
+            ).join(Modalidad).switch(Publicaciones).join(Usuarios
+            ).where(Publicaciones.id_usuario == self.id_usuario).iterator()
 
 
 class Modalidad(BaseModel):
@@ -103,8 +104,9 @@ class Publicaciones(BaseModel):
 
     @property
     def comentarios(self, /):
-        return Comentario.select().join(Publicaciones).where(
-            Comentario.id_publicacion==self.id_publicacion).iterator()
+        return Comentario.select(Comentario, Publicaciones, Usuarios).join(
+        Publicaciones).switch(Comentario).join(Usuarios
+        ).where(Comentario.id_publicacion == self.id_publicacion).iterator()
 
     @classmethod
     def latest(cls, usuario, /):
@@ -180,6 +182,7 @@ database.create_tables((Usuarios,Modalidad,Publicaciones,Comentario,Estatus,
     EtiquetaReaccion,Reacciones,Solicitudes,Titulo_Profesional))
 
 del dumps, loads, datetime
+
 # Titulo_Profesional.insert_many(
 # [('No studies or incomplete school studies','High School',
 # 'Degree',"Master's degree",'technologist')],

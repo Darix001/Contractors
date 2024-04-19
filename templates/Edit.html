@@ -261,7 +261,7 @@
                     </tr>
                   </thead>
                   <tbody id="tablaHabilidades">
-                    {% for habilidad in usuario.habilidades %}
+                    {% for habilidad in query %}
                       <tr>
                         <td>{{loop.index0 + 1}}</td>
                         <td><input type="text" value="{{habilidad}}" 
