@@ -8,7 +8,7 @@
 <li class="nav-item">
     <a class="nav-link" data-widget="navbar-search" href="#" role="button">
         <i class="fas fa-search"></i>
-        Buscar usuarios
+        Search Users
     </a>
     <div class="navbar-search-block">
         <form class="form-inline">
@@ -37,11 +37,11 @@
     <li class="nav-item d-none d-sm-inline-block">
         <a href="/UserProfile" class="nav-link btn btn-block btn-outline-secondary btn-small">
             <i class="fas fa-user"></i>
-            Mi perfil
+            My profile
         </a>
     </li>
     <li class="nav-item d-none d-sm-inline-block">
-        <a href="/close" class="nav-link">Cerrar sesión</a>
+        <a href="/close" class="nav-link">Log out</a>
     </li>
 </div>
 
@@ -66,7 +66,7 @@
                     <p>{{usuario.telefono}}</p>
                     <p>{{usuario.email}}</p>
                     <hr>
-                    <a href="/Edit" class="fas fa-pencil-alt mr-1">Editar</a>
+                    <a href="/Edit" class="fas fa-pencil-alt mr-1">Edit</a>
                 </div>
             </div>
 
@@ -112,18 +112,17 @@
         </div>
         <div class="col-lg-8">
             <!-- Botón para mostrar formulario de creación de publicación -->
-            <button type="button" class="btn btn-dark" id="btnMostrarFormulario" style="margin-top: 20px;">Crear
-                Publicación</button>
+            <button type="button" class="btn btn-dark" id="btnMostrarFormulario" style="margin-top: 20px;">Create Post</button>
 
             <!-- Formulario de creación de publicaciones (inicialmente oculto) -->
             <div class="card card-widget" id="formularioPublicacion" style="margin-top: 20px; display: none;">
                 <div class="card-header">
-                    <h3 class="card-title">Crear nueva publicación</h3>
+                    <h3 class="card-title">Create new post</h3>
                 </div>
                 <div class="card-body">
                     <form method="post">
                         <div class="form-group">
-                            <label for="titulo">Título:</label>
+                            <label for="titulo">Title:</label>
                             <input type="text" class="form-control" id="titulo" name="titulo" required>
                         </div>
                         <div class="form-group">
@@ -142,8 +141,12 @@
                             <input type="text" class="form-control" id="area" name="area" required>
                         </div>
                         <div class="form-group">
-                            <label for="contenido">Contenido:</label>
+                            <label for="contenido">Content:</label>
                             <textarea class="form-control" id="contenido" name="contenido" rows="4" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="categoria">Category:</label>
+                            <input type="text" class="form-control" id="categoria" name="categoria" placeholder="computing, software" required>
                         </div>
                         <div class="photo-container"
                             style="width: 100%; height: 320px; border: 2px solid; margin-bottom: 10px; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative;">
@@ -155,8 +158,8 @@
                             <i class="fas fa-plus"></i>
                             <span>Add Photo</span>
                         </label>
-                        <button type="submit" class="btn btn-dark">Publicar</button>
-                        <button type="button" class="btn btn-danger" id="btnCancelar">Cancelar</button>
+                        <button type="submit" class="btn btn-dark">Post</button>
+                        <button type="button" class="btn btn-danger" id="btnCancelar">Cancel</button>
                     </form>
                 </div>
             </div>
@@ -189,7 +192,7 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <span>Modalidad: </span>
+                        <span>Modality: </span>
                         <!-- post text -->
                         <p>{{publicacion.modalidad.nombre}}</p>
                         <p>{{publicacion.contenido}}</p>
@@ -235,7 +238,7 @@
                                 <input type="number" name="id_publicacion" value="{{publicacion.id_publicacion}}" hidden>
                                 <input type="text" class="form-control form-control-sm" id="comentario" name="comentario"
                                     placeholder="Press enter to post comment">
-                                <button type="submit" class="btn btn-dark">Comentar</button>
+                                <button type="submit" class="btn btn-dark" style="margin-top: 10px;">Comment</button>
                             </div>
                         </form>
                     </div>

@@ -2,7 +2,6 @@
 {% block title %}User Profile{% endblock %}
 
 {% block iniciarSesion %}
-
 <div class="ml-auto">
     <li class="nav-item d-none d-sm-inline-block">
         <a href="/HomeUser" class="nav-link btn btn-block btn-outline-secondary btn-small">
@@ -11,14 +10,12 @@
         </a>
     </li>
     <li class="nav-item d-none d-sm-inline-block">
-        <a href="/close" class="nav-link">Cerrar sesión</a>
+        <a href="/close" class="nav-link">Log out</a>
     </li>
 </div>
-
 {% endblock %}
 
 {% block content %}
-
 <div class="container" style="margin-bottom: 50px;">
     <div class="row">
         <div class="col-lg-12">
@@ -41,34 +38,30 @@
                     <div class="tab-content" id="custom-tabs-one-tabContent">
                         <div class="tab-pane fade show active" id="custom-tabs-one-activity" role="tabpanel"
                             aria-labelledby="custom-tabs-one-activity-tab">
-
-
                             <!-- Botón para mostrar formulario de creación de publicación -->
                             <button type="button" class="btn btn-dark" id="btnMostrarFormulario"
-                                style="margin-top: 20px;">Crear
-                                Publicación</button>
+                                style="margin-top: 20px;">Create post</button>
 
                             <!-- Formulario de creación de publicaciones (inicialmente oculto) -->
                             <div class="card card-widget" id="formularioPublicacion"
                                 style="margin-top: 20px; display: none;">
                                 <div class="card-header">
-                                    <h3 class="card-title">Crear nueva publicación</h3>
+                                    <h3 class="card-title">Create new post</h3>
                                 </div>
                                 <div class="card-body">
                                     <form method="post">
                                         <div class="form-group">
-                                            <label for="titulo">Título:</label>
+                                            <label for="titulo">Title:</label>
                                             <input type="text" class="form-control" id="titulo" name="titulo" required>
                                         </div>
                                         <div class="form-group">
-                                            <label for="titulo_profesional">Modality</label>
+                                            <label for="modalidad">Modality</label>
                                             <select class="form-control" id="modalidad" name="modalidad" required>
-                                              <option value="">Select</option>
-                                              <option value="1">intern</option>
-                                              <option value="2">in person</option>
-                                              <option value="3">remote</option>
-                                              <option value="4">mixed</option>
-                                              <!-- Agrega más opciones según necesites -->
+                                                <option value="">Select</option>
+                                                <option value="1">intern</option>
+                                                <option value="2">in person</option>
+                                                <option value="3">remote</option>
+                                                <option value="4">mixed</option>
                                             </select>
                                         </div>
                                         <div class="form-group">
@@ -76,30 +69,31 @@
                                             <input type="text" class="form-control" id="area" name="area" required>
                                         </div>
                                         <div class="form-group">
-                                            <label for="contenido">Contenido:</label>
+                                            <label for="contenido">Content:</label>
                                             <textarea class="form-control" id="contenido" name="contenido" rows="4"
                                                 required></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="categoria">Category:</label>
+                                            <input type="text" class="form-control" id="categoria" name="categoria" placeholder="computing, software" required>
                                         </div>
                                         <div class="photo-container"
                                             style="width: 100%; height: 320px; border: 2px solid; margin-bottom: 10px; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative;">
                                             <img id="previewImage" width="250px" height="300px" alt="Preview"
-                                            src="data:;base64,{{usuario.base64}}"
+                                                src="data:;base64,{{usuario.base64}}"
                                                 style="object-fit: contain;">
                                         </div>
                                         <input type="file" id="inputFile" class="d-none" name="foto">
-                                        <label for="inputFile"
-                                            class="btn btn-success col fileinput-button dz-clickable">
+                                        <label for="inputFile" class="btn btn-success col fileinput-button dz-clickable">
                                             <i class="fas fa-plus"></i>
                                             <span>Add Photo</span>  
                                         </label>
-                                        <button type="submit" class="btn btn-dark">Publicar</button>
-                                        <button type="button" class="btn btn-danger" id="btnCancelar">Cancelar</button>
+                                        <button type="submit" class="btn btn-dark">Post</button>
+                                        <button type="button" class="btn btn-danger" id="btnCancelar">Cancel</button>
                                     </form>
                                 </div>
                             </div>
                             
-
-
                             <!-- Box Comment -->
                             {% for publicacion in query %}
                             <div class="card card-widget" style="margin-top: 20px;">
@@ -111,7 +105,6 @@
                                         <span class="username"><a href="#">{{usuario.usuario}}</a></span>
                                         <span class="description">{{publicacion.titulo}} - {{publicacion.fecha}}</span>
                                     </div>
-                                    <!-- /.user-block -->
                                     <div class="card-tools">
                                         <button type="button" class="btn btn-tool" title="Mark as read">
                                             <i class="far fa-circle"></i>
@@ -123,12 +116,9 @@
                                             <i class="fas fa-times"></i>
                                         </button>
                                     </div>
-                                    <!-- /.card-tools -->
                                 </div>
-                                <!-- /.card-header -->
                                 <div class="card-body">
-                                    <span>Modalidad: </span>
-                                    <!-- post text -->
+                                    <span>Modality: </span>
                                     <p>{{publicacion.modalidad.nombre}}</p>
                                     <p>{{publicacion.contenido}}</p>
                                     
@@ -136,22 +126,7 @@
                                     {% if publicacion.imagen %}
                                     <div class="attachment-block clearfix">
                                         <img src="data:;base64,{{publicacion.base64}}">
-<!-- 
-                                        <div class="attachment-pushed">
-                                            <h4 class="attachment-heading"><a href="https://www.lipsum.com/">Lorem ipsum
-                                                    text
-                                                    generator</a></h4>
-
-                                            <div class="attachment-text">
-                                                Description about the attachment can be placed here.
-                                                Lorem Ipsum is simply dummy text of the printing and typesetting
-                                                industry... <a href="#">more</a>
-                                            </div>
-                                            
-                                        </div> -->
-                                        <!-- /.attachment-pushed -->
                                     </div>
-                                    <!-- /.attachment-block -->
                                     {% endif %}
                                     <!-- Social sharing buttons -->
                                     <button type="button" class="btn btn-default btn-sm"><i class="fas fa-share"></i>
@@ -162,16 +137,11 @@
                                         <a href="Comentarios/id={{publicacion}}"></a>
                                     {{publicacion.likes}} likes - <a href="/publicacion/{{publicacion.id_usuario}}">see comments</a></span>
                                 </div> 
-                                {% endfor %}
-                                <!-- /.card-body -->
-                                
-                                <!-- /.card-footer -->
                                 <div class="card-footer">
                                     <form method="post">
                                         <img class="img-fluid img-circle img-sm "
                                             src="data:;base64,{{usuario.base64}}"
                                             alt="Alt Text">
-                                        <!-- .img-push is used to add margin to elements next to floating images -->
                                         <div class="img-push">
                                             <input type="number" name="id_publicacion" value="{{publicacion}}" hidden>
                                             <input type="text" class="form-control form-control-sm" id="comentario"
@@ -180,22 +150,19 @@
                                         </div>
                                     </form>
                                 </div>
-                                <!-- /.card-footer -->
                             </div>
-                            <!-- /.card -->
-
-
-
+                            {% endfor %}
                         </div>
-                        <div class="tab-pane fade" id="custom-tabs-one-profile" role="\tabpanel"
+                        <!-- /.tab-pane -->
+
+                        <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel"
                             aria-labelledby="custom-tabs-one-profile-tab">
                             <div class="col-lg-12">
                                 <div style="margin-bottom: 10px;">
                                     <a href="/Edit">
-                                        <button type="button" class="btn btn-dark">Editar</button>
+                                        <button type="button" class="btn btn-dark">Edit</button>
                                     </a>
                                 </div>
-
                                 <div class="card card-dark">
                                     <div class="card-header">
                                         <h3 class="card-title">Personal information</h3>
@@ -210,12 +177,6 @@
                                                     src="data:;base64,{{usuario.base64}}"
                                                          style="object-fit: contain;">
                                                 </div>
-                                                <!-- <input type="file" id="inputFile" class="d-none">
-                                                <label for="inputFile"
-                                                    class="btn btn-success col fileinput-button dz-clickable">
-                                                    <i class="fas fa-plus"></i>
-                                                    <span>Add Photo</span>
-                                                </label> -->
                                             </div>
                                         </div>
                                         <div class="col-lg-4"></div>
@@ -251,11 +212,10 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="col-lg-12">
                                 <div class="card card-dark">
                                     <div class="card-header">
-                                        <h3 class="card-title">Profesional resumen</h3>
+                                        <h3 class="card-title">Professional summary</h3>
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
@@ -279,12 +239,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row"></div>
-                                        <div class="row"></div>
                                     </div>
                                 </div>
                             </div>
-
                             <div class="col-lg-12">
                                 <div class="card card-dark">
                                     <div class="card-header">
@@ -296,34 +253,32 @@
                                           <div class="col-lg-6">
                                             <label for="nombreEmpresa_">Company Name:</label>
                                             <input type="text" class="form-control" id="nombreEmpresa_" name="nombreEmpresa_" value="{{xp[0]}}"
-                                              placeholder="Nombre de la empresa">
+                                              placeholder="Nombre de la empresa" disabled>
                                           </div>
                                           <div class="col-lg-6">
                                             <label for="periodoTrabajo_">Working period</label>
                                             <input type="text" class="form-control" id="periodoTrabajo_" name="periodoTrabajo_" value="{{xp[1]}}"
-                                              placeholder="¡(MM/AAAA - MM/AAAA)">
+                                              placeholder="¡(MM/AAAA - MM/AAAA)" disabled>
                                           </div>
                                         </div>
                                         <div class="row">
                                           <div class="col-lg-12">
                                             <label for="responsabilidades_">Description of responsibilities and achievements:</label>
                                             <textarea class="form-control" id="responsabilidades_" name="responsabilidades_" rows="4"
-                                              placeholder="Describe your responsabilities and achievements on this work">{{xp[2]}}</textarea>
+                                              placeholder="Describe your responsabilities and achievements on this work" disabled>{{xp[2]}}</textarea>
                                           </div>
                                         </div>
-
                                         {% else %}
-
                                         <div class="row">
                                           <div class="col-lg-6">
                                             <label for="nombreEmpresa_">Company Name:</label>
                                             <input type="text" class="form-control" id="nombreEmpresa_" name="nombreEmpresa_"
-                                              placeholder="Nombre de la empresa">
+                                              placeholder="Nombre de la empresa" disabled>
                                           </div>
                                           <div class="col-lg-6">
                                             <label for="periodoTrabajo_">Working period</label>
                                             <input type="text" class="form-control" id="periodoTrabajo_" name="periodoTrabajo_"
-                                              placeholder="¡(MM/AAAA - MM/AAAA)">
+                                              placeholder="¡(MM/AAAA - MM/AAAA)" disabled>
                                           </div>
                                         </div>
                                         <div class="row">
@@ -331,16 +286,13 @@
                                             <label for="responsabilidades_">Description of responsibilities and
                                               achievements:</label>
                                             <textarea class="form-control" id="responsabilidades_" name="responsabilidades_" rows="4"
-                                              placeholder="Describe your responsabilities and achievements on this work"></textarea>
+                                              placeholder="Describe your responsabilities and achievements on this work" disabled></textarea>
                                           </div>
                                         </div>
-
                                         {% endfor %}
-
                                     </div>
                                 </div>
                             </div>
-
                             <div class="col-lg-12">
                                 <div class="card card-dark">
                                     <div class="card-header">
@@ -352,41 +304,39 @@
                                           <div class="col-lg-6">
                                             <label for="institucion_">Educational institution:</label>
                                             <input type="text" class="form-control" id="institucion_" name="institucion_" value="{{edu[0]}}"
-                                              placeholder="Name of The Educational institution">
+                                              placeholder="Name of The Educational institution" disabled>
                                           </div>
                                           <div class="col-lg-6">
                                             <label for="titulo_">Obtained title:</label>
                                             <input type="text" class="form-control" id="titulo_" name="titulo_" placeholder="Obtained title"
-                                              value="{{edu[1]}}">
+                                              value="{{edu[1]}}" disabled>
                                           </div>
                                         </div>
                                         <div class="row">
                                           <div class="col-lg-6">
                                             <label for="periodoEstudio_">Working period:</label>
                                             <input type="text" class="form-control" id="periodoEstudio_" name="periodoEstudio_" value="{{edu[2]}}"
-                                              placeholder="(MM/AAAA - MM/AAAA)">
+                                              placeholder="(MM/AAAA - MM/AAAA)" disabled>
                                           </div>
                                           <div class="col-lg-6"></div>
                                         </div>
-
                                         {% else %}
-
                                         <div class="row">
                                           <div class="col-lg-6">
                                             <label for="institucion_">Educational institution:</label>
                                             <input type="text" class="form-control" id="institucion_" name="institucion_"
-                                              placeholder="Name of The Educational institution">
+                                              placeholder="Name of The Educational institution" disabled>
                                           </div>
                                           <div class="col-lg-6">
                                             <label for="titulo_">Obtained title:</label>
-                                            <input type="text" class="form-control" id="titulo_" name="titulo_" placeholder="Obtained title">
+                                            <input type="text" class="form-control" id="titulo_" name="titulo_" placeholder="Obtained title" disabled>
                                           </div>
                                         </div>
                                         <div class="row">
                                           <div class="col-lg-6">
                                             <label for="periodoEstudio_">Working period:</label>
                                             <input type="text" class="form-control" id="periodoEstudio_" name="periodoEstudio_"
-                                              placeholder="(MM/AAAA - MM/AAAA)">
+                                              placeholder="(MM/AAAA - MM/AAAA)" disabled>
                                           </div>
                                           <div class="col-lg-6"></div>
                                         </div>
@@ -394,7 +344,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="col-lg-12">
                                 <div class="card card-dark">
                                     <div class="card-header">
@@ -423,20 +372,50 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
 
+                            <div class="col-lg-12">
+                                <div class="card card-dark">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Interests</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width: 10px;">#</th>
+                                                            <th>Interests</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tablaInteresess">
+                                                    {% for hab in usuario.habilidades %}
+                                                        <tr>
+                                                        <td>{{loop.index0 + 1}}</td>
+                                                        <td>{{hab}}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
-
+                        <!-- /.tab-pane -->
                     </div>
-                </div>
-                <!-- /.card -->
+                    <!-- /.tab-content -->
+                </div><!-- /.card-body -->
             </div>
+            <!-- /.card -->
         </div>
+        <!-- /.col-lg-12 -->
     </div>
+    <!-- /.row -->
 </div>
-
-
+<!-- /.container -->
 
 {% endblock %}
 

@@ -7,11 +7,11 @@
   <li class="nav-item d-none d-sm-inline-block">
     <a href="/UserProfile" class="nav-link btn btn-block btn-outline-secondary btn-small">
       <i class="fas fa-user"></i>
-      Mi perfil
+      My profile
     </a>
   </li>
   <li class="nav-item d-none d-sm-inline-block">
-    <a href="/close" class="nav-link">Cerrar sesión</a>
+    <a href="/close" class="nav-link">Log out</a>
   </li>
 </div>
 {% endblock %}
@@ -163,7 +163,7 @@
               <div class="col-lg-4">
                 <a class="btn btn-app" id="btnAgregarMas">
                   <i class="fas fa-plus"></i>
-                  Agregar
+                  Add
                 </a>
               </div>
             </div>
@@ -229,7 +229,7 @@
               <div class="col-lg-4">
                 <a class="btn btn-app" id="btnAgregarEducacion">
                   <i class="fas fa-plus"></i>
-                  Agregar
+                  Add
                 </a>
               </div>
             </div>
@@ -267,7 +267,49 @@
                         <td><input type="text" value="{{habilidad}}" 
                           name="habilidades" class="transparent_input"
                           id="habilidades" readonly></td>
-                        <td><button type="button" class="btn btn-danger btn-sm btnEliminarSkill">Eliminar</button></td>
+                        <td><button type="button" class="btn btn-danger btn-sm btnEliminarSkill">Delete</button></td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+      </div>
+      <div class="col-lg-12">
+        <div class="card card-dark">
+          <div class="card-header">
+            <h3 class="card-title">Interests</h3>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-lg-6">
+                <label for="interesesInput">Enter your interests</label>
+                <input type="text" class="form-control"
+                  placeholder="Example: Languages, Software, Computing" id="interesesInput" />
+                <button type="button" class="btn btn-dark" id="btnAgregariInteres" style="margin-top: 10px;">Add Interest</button>
+              </div>
+              <div class="col-lg-6">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th style="width: 10px;">#</th>
+                      <th>Interests</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tablaIntereses">
+                    {% for habilidad in query %}
+                      <tr>
+                        <td>{{loop.index0 + 1}}</td>
+                        <td><input type="text" value="{{Interes}}" 
+                          name="intereses" class="transparent_input"
+                          id="intereses" readonly></td>
+                        <td><button type="button" class="btn btn-danger btn-sm btnEliminarInteres">Delete</button></td>
                       </tr>
                     {% endfor %}
                   </tbody>
@@ -281,9 +323,9 @@
 
       </div>
       <div class="col-lg-6">
-        <input type="submit" class="btn btn-dark" value="Guardar">
+        <input type="submit" class="btn btn-dark" value="Save">
         <a href="/HomeUser">
-          <button type="button" class="btn btn-danger">Cancelar</button>
+          <button type="button" class="btn btn-danger">Cancel</button>
         </a>
       </div>
       <div class="col-lg-6">
@@ -317,7 +359,7 @@
             <tr>
                 <td>${$("#tablaHabilidades tr").length + 1}</td> 
                 <td><input type="text" value="${habilidad}" name="habilidades"  class="transparent_input" id="habilidades" readonly></td>
-                <td><button type="button" class="btn btn-danger btn-sm btnEliminarSkill">Eliminar</button></td>
+                <td><button type="button" class="btn btn-danger btn-sm btnEliminarSkill">Delete</button></td>
             </tr>
             `;
             $("#tablaHabilidades").append(fila);
@@ -336,6 +378,34 @@
         $(this).find("td:first").text(index + 1);
       });
     }
+
+    // Función para agregar Intereses a la tabla
+$("#btnAgregariInteres").click(function () {
+  let habilidad = $("#interesesInput").val().trim();
+  if (habilidad) {
+      let fila = `
+      <tr>
+          <td>${$("#tablaIntereses tr").length + 1}</td> 
+          <td><input type="text" value="${habilidad}" name="intereses"  class="transparent_input" id="intereses" readonly></td>
+          <td><button type="button" class="btn btn-danger btn-sm btnEliminarInteres">Delete</button></td>
+      </tr>
+      `;
+      $("#tablaIntereses").append(fila);
+      $("#interesesInput").val("");
+  }
+});
+
+$(document).on("click", ".btnEliminarInteres", function () {
+    $(this).closest("tr").remove();
+    actualizarNumeracionIntereses();
+});
+
+// Función para actualizar la numeración de las filas
+function actualizarNumeracionIntereses() {
+  $("#tablaIntereses tr").each(function (index) {
+    $(this).find("td:first").text(index + 1);
+  });
+}
 
     // Cuando se selecciona un archivo en el input de tipo file
     $("#inputFile").change(function () {
