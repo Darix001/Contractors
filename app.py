@@ -22,14 +22,17 @@ with open('config.json', 'rb') as config:
 def getcode() -> int:
     return int.from_bytes(urandom(3))
 
+
 @app.before_request
 def connect():
     database.connect()
+
 
 @app.teardown_request
 def close(exc, /):
     if not database.is_closed():
         database.close()
+
 
 def post(obj=None, /, text='', forward="HomeUser"):
     if obj:
@@ -43,9 +46,11 @@ def post(obj=None, /, text='', forward="HomeUser"):
         return app.route('/' + name)(update_wrapper(function, obj))
     return partial(post, text=text, forward=forward)
 
+
 @app.route('/')
 def main():
     return redirect(url_for('Home'))
+
 
 @post(text='Login')
 def Login(form, /):
@@ -109,6 +114,7 @@ def close():
 def Home(form, /):
     pass
 
+
 def check_logged(func):
     def function(key=None):
         if usuario:=session.get('current_user'):
@@ -116,6 +122,7 @@ def check_logged(func):
         else:
             return redirect(url_for('Login'))
     return function
+
 
 def user_page(get, obj=None, /):
     if obj:
@@ -136,6 +143,7 @@ def user_page(get, obj=None, /):
         return app.route('/' + name)(update_wrapper(function, obj))
     return partial(user_page, get)
 
+
 @user_page(attrgetter('habilidades'))
 def Edit(form, usuario, /):
     data = usuario.__data__
@@ -151,6 +159,7 @@ def Edit(form, usuario, /):
         data[field] = [*zip(*map(data.pop, keys))]
     usuario.save()
 
+
 def load_profile(usuario, current_user):
     return render_template('UserProfile.html',
         usuario = usuario,
@@ -158,9 +167,10 @@ def load_profile(usuario, current_user):
         readonly = usuario != current_user,
         )
     
-@app.errorhandler()
+@app.errorhandler(404)
 def page_not_found(error):
     return render_template('error.html')
+
 
 @user_page(Publicaciones.latest)
 def HomeUser(form, usuario, /):
@@ -168,18 +178,24 @@ def HomeUser(form, usuario, /):
         if search := Usuarios.get_or_none(usuario=search):
             return load_profile(search, usuario)
         else:
-            raise KeyError(form['search'])
+            return render_template('error.html', obj='username')
     save_publication_or_comment(form, usuario)
+
 
 @check_logged
 @app.route('/user/<key>')
 def username_click(key):
-    return load_profile(Usuarios.get_by_id(int(key)))
+    try:
+        key = Usuarios.get_by_id(int(key))
+    except Exception as e:
+        raise e
+    return load_profile(key)
 
 
 @user_page(Usuarios.publicaciones)
 def UserProfile(form, usuario,/):
     save_publication_or_comment(form, usuario)
+
 
 @check_logged
 @app.route('/publicacion/<key>')
@@ -194,6 +210,7 @@ def Publicacion(key):
             Comentario(id_usuario=usuario, id_publicacion=key,
                 comentario=form['comentario']).save()
 
+
 def save_publication_or_comment(form, usuario, /):
     table = Comentario if 'comentario' in form else Publicaciones
     if imagen := request.files.get('imagen'):
@@ -205,6 +222,5 @@ if __name__ == '__main__':
     app.config.update(
         SECRET_KEY = urandom(32),
         DEBUG = True,
-        TESTING = True
-        )
+        TESTING = True)
     app.run()
