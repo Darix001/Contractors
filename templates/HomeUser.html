@@ -30,7 +30,6 @@
 
 {% endblock %}
 
-
 {% block iniciarSesion %}
 
 <div class="ml-auto">
@@ -46,6 +45,7 @@
 </div>
 
 {% endblock %}
+
 {% block content %}
 
 <div class="container" style="margin-bottom: 100px;">
@@ -125,7 +125,7 @@
                             <input type="text" class="form-control" id="titulo" name="titulo" required>
                         </div>
                         <div class="form-group">
-                            <label for="titulo_profesional">Modality</label>
+                            <label for="modalidad">Modality</label>
                             <select class="form-control" id="modalidad" name="modalidad" required>
                               <option value="">Select</option>
                               <option value="1">intern</option>
@@ -163,7 +163,6 @@
                 </div>
             </div>
 
-
             <!-- Box Comment -->
             {% for publicacion in query %}
                 <div class="card card-widget" style="margin-top: 20px;">
@@ -191,11 +190,8 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <span>Modality: </span>
                         <!-- post text -->
-                        <p>{{publicacion.modalidad.nombre}}</p>
-                        <p>{{publicacion.contenido}}</p>
-                        
+                        <div class="publication-content">{{publicacion.contenido}}</div>
                         <!-- Attachment -->
                         {% if publicacion.imagen %}
                         <div class="attachment-block clearfix">
@@ -218,11 +214,11 @@
                         <!-- /.attachment-block -->
                         {% endif %}
                         <!-- Social sharing buttons -->
-                        <button type="button" class="btn btn-default btn-sm"><i class="fas fa-share"></i>
-                            Share</button>
+                        <button type="button" class="btn btn-default btn-sm" 
+                        onclick="Copy({{publicacion}});"><i class="fas fa-share"></i>Share</button>
                         <button type="button" class="btn btn-default btn-sm"><i
                             class="far fa-thumbs-up"></i> Like</button>
-                        <span class="float-right text-muted">{{publicacion.likes}} likes - <a href="/publicacion/{{publicacion.id_usuario}}">see comments</a></span>
+                        <span class="float-right text-muted">{{publicacion.likes}} likes - <a href="/publicacion/{{publicacion}}">see comments</a></span>
                     </div> 
                     <!-- /.card-body -->
                     
@@ -234,18 +230,17 @@
                                 alt="Alt Text">
                             <!-- .img-push is used to add margin to elements next to floating images -->
                             <div class="img-push">
-                                <input type="number" name="id_publicacion" value="{{publicacion.id_publicacion}}" hidden>
+                                <input type="number" name="id_publicacion" value="{{publicacion}}" hidden>
                                 <input type="text" class="form-control form-control-sm" id="comentario" name="comentario"
                                     placeholder="Press enter to post comment">
                                 <button type="submit" class="btn btn-dark" style="margin-top: 10px;">Comment</button>
                             </div>
                         </form>
                     </div>
-                    {% endfor %}
                     <!-- /.card-footer -->
                 </div>
                 <!-- /.card -->
-
+                {% endfor %}
 
 
         </div>

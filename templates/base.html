@@ -50,6 +50,11 @@
             border-color: white;
             border-width: 0px;
           }
+
+        .publication-content{
+            white-space: pre-wrap;
+        } 
+
           
     </style>
 </head>
@@ -82,7 +87,10 @@
 
 
     <!-- Content -->
-    {% block content %}{% endblock %}
+    
+    {% block content %}
+
+    {% endblock %}
 
     <!-- Main Footer -->
     <div class="row w-100">
@@ -125,14 +133,30 @@
     <script src="{{ url_for('static', filename='plugins/daterangepicker/daterangepicker.js') }}"></script>
     <script
         src="{{ url_for('static', filename='plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
-    {% block scripts %}{% endblock %}
+    <script type="text/javascript">
+        var Copy = function(id) {
+            location = window.location;
+            var url = location.href;
+            if (!url.includes('/publicacion/')) {
+                url = `${location.host}/publicacion/${id}`
+            }
+            navigator.clipboard.writeText(url);
+            alert("URL copied!");
+            }
+    </script>
+    
+    {% block scripts %}
+
+    {% endblock %}
 
     <script type="text/javascript">
         $(function(){
             $('input[type="text"]').change(function(){
                 this.value = $.trim(this.value);
             });
+
         });
+
     </script>
     
 </body>

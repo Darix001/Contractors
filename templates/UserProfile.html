@@ -125,9 +125,7 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <span>Modality: </span>
-                                    <p>{{publicacion.modalidad.nombre}}</p>
-                                    <p>{{publicacion.contenido}}</p>
+                                    <div class="publication-content">{{publicacion.contenido}}</div>
                                     
                                     <!-- Attachment -->
                                     {% if publicacion.imagen %}
@@ -136,13 +134,14 @@
                                     </div>
                                     {% endif %}
                                     <!-- Social sharing buttons -->
-                                    <button type="button" class="btn btn-default btn-sm"><i class="fas fa-share"></i>
+                                    <button type="button" class="btn btn-default btn-sm"
+                                    onclick="Copy({{publicacion}});"><i class="fas fa-share"></i>
                                         Share</button>
                                     <button type="button" class="btn btn-default btn-sm"><i
                                             class="far fa-thumbs-up"></i> Like</button>
                                     <span class="float-right text-muted">
                                         <a href="Comentarios/id={{publicacion}}"></a>
-                                    {{publicacion.likes}} likes - <a href="/publicacion/{{publicacion.id_usuario}}">see comments</a></span>
+                                    {{publicacion.likes}} likes - <a href="/publicacion/{{publicacion}}">see comments</a></span>
                                 </div> 
                                 <div class="card-footer">
                                     <form method="post">
@@ -151,9 +150,13 @@
                                             alt="Alt Text">
                                         <div class="img-push">
                                             <input type="number" name="id_publicacion" value="{{publicacion}}" hidden>
+                                            <div class="input-group-append">
                                             <input type="text" class="form-control form-control-sm" id="comentario"
                                             name="comentario"
                                                 placeholder="Press enter to post comment">
+                                            <button type="submit" class="btn btn-dark"
+                                            style="font-size: 12px;">Comment</button>
+                                        </div>
                                         </div>
                                     </form>
                                 </div>

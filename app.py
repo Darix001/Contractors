@@ -199,7 +199,7 @@ def UserProfile(form, usuario,/):
 @app.route('/publicacion/<key>')
 @check_logged
 def Publicacion(usuario, key,/):
-    if key := Publicaciones.get_by_id(int(key)):
+    if not (key := Publicaciones.get_by_id(int(key))):
         return abort(404)
     match request.method:
         case 'GET':
